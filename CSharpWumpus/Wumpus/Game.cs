@@ -42,8 +42,7 @@ namespace Wumpus
                     {0, 10, 12, 19}, {0, 3, 11, 13}, {0, 12, 14, 20}, {0, 4, 13, 15}, {0, 6, 14, 16},
                     {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
                 };
-                _hazards._currentHazards = new int[7];
-                _hazards._lastHazardsGenerated = new int[7];
+              
                 int[] p = new int[6];
                 int aa = 5;
                 int ll = aa;
@@ -141,14 +140,7 @@ namespace Wumpus
                             _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
                             break; // 335 print "HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!"
                         case 340:
-                            j = 1;
-                            break; // 340 for j = 1 to 6
-                        case 345:
-                            _hazards._currentHazards[j] = _hazards._lastHazardsGenerated[j];
-                            break; // 345 l(j) = m(j)
-                        case 350:
-                            ++j;
-                            if (j <= 6) _nextLine = 345;
+                            _hazards.ResetToLastHazards();
                             break; // 350 next j
                         case 355:
                             _io.Prompt("SAME SETUP (Y-N)");
