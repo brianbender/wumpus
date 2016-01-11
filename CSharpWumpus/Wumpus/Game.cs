@@ -11,6 +11,15 @@ namespace Wumpus
         private IO _io;
         private readonly Hazards _hazards;
 
+        int[,] exits =
+                {
+                    {0, 0, 0, 0},
+                    {0, 2, 5, 8}, {0, 1, 3, 10}, {0, 2, 4, 12}, {0, 3, 5, 14}, {0, 1, 4, 6},
+                    {0, 5, 7, 15}, {0, 6, 8, 17}, {0, 1, 7, 9}, {0, 8, 10, 18}, {0, 2, 9, 11},
+                    {0, 10, 12, 19}, {0, 3, 11, 13}, {0, 12, 14, 20}, {0, 4, 13, 15}, {0, 6, 14, 16},
+                    {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
+                };
+
         public Game(IO io)
         {
             this._io = io;
@@ -34,14 +43,7 @@ namespace Wumpus
             {
                 _currentLine = 5;
                 char istr = '\0';
-                int[,] exits =
-                {
-                    {0, 0, 0, 0},
-                    {0, 2, 5, 8}, {0, 1, 3, 10}, {0, 2, 4, 12}, {0, 3, 5, 14}, {0, 1, 4, 6},
-                    {0, 5, 7, 15}, {0, 6, 8, 17}, {0, 1, 7, 9}, {0, 8, 10, 18}, {0, 2, 9, 11},
-                    {0, 10, 12, 19}, {0, 3, 11, 13}, {0, 12, 14, 20}, {0, 4, 13, 15}, {0, 6, 14, 16},
-                    {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
-                };
+              
               
                 int[] p = new int[6];
                 int aa = 5;
@@ -138,15 +140,13 @@ namespace Wumpus
                             _io.WriteLine("");
                             break; // 590 print
                       case 605:
+                            var neihboringRooms = getNeighboringRooms();
+
                             for(j = 2; j<=6; ++j)
-                                for(k =1;k<=3;++k)
-                                    if (exits[_hazards._currentHazards[1], k] == _hazards._currentHazards[j])
-                                        PrintNearHazard(j);
+                                if (neihboringRooms.Contains(_hazards._currentHazards[j]))
+                                    PrintNearHazard(j);
+                                
                             break; // 605 if s(l(1),k) <> l(j) then 640
-                        //case 610:
-                        //    PrintNearHazard(j);
-                        //    break;
-                 
                         case 650:
                             _io.Prompt("YOUR ARE IN ROOM ");
                             _io.WriteLine(_hazards._currentHazards[1].ToString());
@@ -415,6 +415,19 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private List<int> getNeighboringRooms()
+        {
+            List<int> neighboringRooms = new List<int>();
+            for (int i = 1; i <= 3; i++)
+                neighboringRooms.Add(exits[GetPlayerLocation(), i]);
+            return neighboringRooms;
+        }
+
+        private int GetPlayerLocation()
+        {
+            return _hazards._currentHazards[1];
         }
 
         private void PrintNearHazard(int j)
