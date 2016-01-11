@@ -60,14 +60,12 @@ namespace Wumpus
                             j = 1;
                             break; // 170 for j = 1 to 6
                         case 175:
-                            l[j] = RollD20();
-                            break; // 175 l(j) = fna(0)
-                        case 180:
-                            m[j] = l[j];
-                            break; // 180 m(j) = l(j)
-                        case 185:
-                            ++j;
-                            if (j <= 6) _nextLine = 175;
+                            do
+                            {
+                                l[j] = RollD20();
+                                m[j] = l[j];
+                                ++j; 
+                            } while (j <= 6);
                             break; // 185 next j
                         case 195:
                             j = 1;
