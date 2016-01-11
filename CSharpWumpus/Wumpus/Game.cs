@@ -45,9 +45,9 @@ namespace Wumpus
                 char istr = '\0';
               
               
-                int[] p = new int[6];
-                int aa = 5;
-                int ll = aa;
+                int[] arrowFiringPath = new int[6];
+                int arrowsLeft = 5;
+                int ll = arrowsLeft;
                 int o = 1;
                 int f = 0;
 
@@ -66,7 +66,7 @@ namespace Wumpus
                             _boardPieces.GenerateBoardPieces(Dice);
                             break;
                         case 230:
-                            aa = 5;
+                            arrowsLeft = 5;
                             break; // 230 a = 5
                         case 235:
                             ll = _boardPieces._pieces[1];
@@ -210,13 +210,13 @@ namespace Wumpus
                             _io.Prompt("ROOM # ");
                             break; // 760 print "ROOM #";
                         case 765:
-                            p[k] = _io.readInt();
+                            arrowFiringPath[k] = _io.readInt();
                             break; // 765 input p(k)
                         case 770:
                             if (k <= 2) _nextLine = 790;
                             break; // 770 if k <= 2 then 790
                         case 775:
-                            if (p[k] != p[k - 2]) _nextLine = 790;
+                            if (arrowFiringPath[k] != arrowFiringPath[k - 2]) _nextLine = 790;
                             break; // 775 if p(k) <> p(k-2) then 790
                         case 780:
                             _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
@@ -238,7 +238,7 @@ namespace Wumpus
                             k1 = 1;
                             break; // 810 for k1 = 1 to 3
                         case 815:
-                            if (exits[ll, k1] == p[k]) _nextLine = 895;
+                            if (exits[ll, k1] == arrowFiringPath[k]) _nextLine = 895;
                             break; // 815 if s(l,k1) = p(k) then 895
                         case 820:
                             ++k1;
@@ -264,10 +264,10 @@ namespace Wumpus
                             gosub(935, 865);
                             break; // 860 gosub 935
                         case 870:
-                            aa = aa - 1;
+                            arrowsLeft = arrowsLeft - 1;
                             break; // 870 a = a-1
                         case 875:
-                            if (aa > 0) _nextLine = 885;
+                            if (arrowsLeft > 0) _nextLine = 885;
                             break; // 875 if a > 0 then 885
                         case 880:
                             f = -1;
@@ -276,7 +276,7 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 885 return
                         case 895:
-                            ll = p[k];
+                            ll = arrowFiringPath[k];
                             break; // 895 l = p(k)
                         case 900:
                             if (ll != _boardPieces._pieces[2]) _nextLine = 920;
