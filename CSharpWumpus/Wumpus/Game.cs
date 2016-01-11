@@ -137,26 +137,16 @@ namespace Wumpus
                         case 590:
                             _io.WriteLine("");
                             break; // 590 print
-                        case 595:
-                            j = 2;
-                            break; // 595 for j = 2 to 6
-                        case 600:
-                            k = 1;
-                            break; // 600 for k = 1 to 3
-                        case 605:
-                            if (exits[_hazards._currentHazards[1], k] != _hazards._currentHazards[j]) _nextLine = 640;
+                      case 605:
+                            for(j = 2; j<=6; ++j)
+                                for(k =1;k<=3;++k)
+                                    if (exits[_hazards._currentHazards[1], k] == _hazards._currentHazards[j])
+                                        PrintNearHazard(j);
                             break; // 605 if s(l(1),k) <> l(j) then 640
-                        case 610:
-                            PrintNearHazard(j);
-                            break;
-                        case 640:
-                            ++k;
-                            if (k <= 3) _nextLine = 605;
-                            break; // 640 next k
-                        case 645:
-                            ++j;
-                            if (j <= 6) _nextLine = 600;
-                            break; // 645 next j
+                        //case 610:
+                        //    PrintNearHazard(j);
+                        //    break;
+                 
                         case 650:
                             _io.Prompt("YOUR ARE IN ROOM ");
                             _io.WriteLine(_hazards._currentHazards[1].ToString());
