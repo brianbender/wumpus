@@ -8,18 +8,30 @@ namespace Wumpus
         private int _currentLine;
         private readonly Stack<int> ReturnLine = new Stack<int>();
         private int _nextLine;
-        public Random random = new Random();
         private IO _io;
         private readonly Hazards _hazards;
+        private Dice _dice;
 
         public Game(IO io)
         {
             this._io = io;
             EarlyExit = 1150;
-            _hazards = new Hazards(this);
+            _dice = new Dice();
+            _hazards = new Hazards();
+
         }
 
-        public int EarlyExit { get; set; } //TODO remove after refactoring so that this isn't needed by tests
+
+
+        public int EarlyExit { get; set; }
+
+        public Dice Dice
+        {
+            get { return _dice; }
+            set { _dice = value; }
+        }
+
+//TODO remove after refactoring so that this isn't needed by tests
 
         public void Play()
         {
@@ -56,7 +68,7 @@ namespace Wumpus
                             istr = GiveIntroduction(istr);
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
-                            _hazards.GenerateHazards(_hazards._currentHazards, _hazards._lastHazardsGenerated);
+                            _hazards.GenerateHazards(_hazards._currentHazards, _hazards._lastHazardsGenerated, Dice);
                             break; // 185 next j
                         case 195:
                             j = 1;
@@ -307,7 +319,7 @@ namespace Wumpus
                             if (k1 <= 3) _nextLine = 815;
                             break; // 820 next k1
                         case 830:
-                            ll = exits[ll, RollD3()];
+                            ll = exits[ll, Dice.RollD3()];
                             break; // 830 l = s(l,fnb(1))
                         case 835:
                             _nextLine = 900;
@@ -362,7 +374,7 @@ namespace Wumpus
                             _nextLine = 880;
                             break; // 930 goto 880
                         case 940:
-                            k = RollD4();
+                            k = Dice.RollD4();
                             break; // 940 k = fnc(0)
                         case 945:
                             if (k == 4) _nextLine = 955;
@@ -459,7 +471,7 @@ namespace Wumpus
                             _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
                             break; // 1130 print "ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!"
                         case 1135:
-                            ll = RollD20();
+                            ll = Dice.RollD20();
                             break; // 1135 l = fna(1)
                         case 1140:
                             _nextLine = 1045;
@@ -497,18 +509,6 @@ namespace Wumpus
                 _nextLine = 1151;
             else
                 _nextLine = ReturnLine.Pop();
-        }
-
-        public int RollD20() {
-            return random.Next(20) + 1;
-        }
-
-        public int RollD3() {
-            return random.Next(3) + 1;
-        }
-
-        public int RollD4() {
-            return random.Next(4) + 1;
         }
     }
 }

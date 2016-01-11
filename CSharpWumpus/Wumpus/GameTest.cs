@@ -61,52 +61,52 @@ namespace Wumpus
         {
             io = new FakeIO();
             testObj = new Game(io);
-            testObj.random = new Random(0); //seed random for expected results
+            testObj.Dice = new Dice(0);
         }
 
         [TestCase]
         public void fnA()
         {
-            Assert.AreEqual(15, testObj.RollD20());
-            Assert.AreEqual(17, testObj.RollD20());
-            Assert.AreEqual(16, testObj.RollD20());
-            Assert.AreEqual(12, testObj.RollD20());
-            Assert.AreEqual(5, testObj.RollD20());
-            Assert.AreEqual(12, testObj.RollD20());
-            Assert.AreEqual(19, testObj.RollD20());
-            Assert.AreEqual(9, testObj.RollD20());
-            Assert.AreEqual(20, testObj.RollD20());
-            Assert.AreEqual(6, testObj.RollD20());
+            Assert.AreEqual(15, testObj.Dice.RollD20());
+            Assert.AreEqual(17, testObj.Dice.RollD20());
+            Assert.AreEqual(16, testObj.Dice.RollD20());
+            Assert.AreEqual(12, testObj.Dice.RollD20());
+            Assert.AreEqual(5, testObj.Dice.RollD20());
+            Assert.AreEqual(12, testObj.Dice.RollD20());
+            Assert.AreEqual(19, testObj.Dice.RollD20());
+            Assert.AreEqual(9, testObj.Dice.RollD20());
+            Assert.AreEqual(20, testObj.Dice.RollD20());
+            Assert.AreEqual(6, testObj.Dice.RollD20());
         }
 
         [TestCase]
         public void fnB()
         {
-            Assert.AreEqual(3, testObj.RollD3());
-            Assert.AreEqual(3, testObj.RollD3());
-            Assert.AreEqual(3, testObj.RollD3());
-            Assert.AreEqual(2, testObj.RollD3());
-            Assert.AreEqual(1, testObj.RollD3());
-            Assert.AreEqual(2, testObj.RollD3());
-            Assert.AreEqual(3, testObj.RollD3());
-            Assert.AreEqual(2, testObj.RollD3());
-            Assert.AreEqual(3, testObj.RollD3());
-            Assert.AreEqual(1, testObj.RollD3());
+            Assert.AreEqual(3, testObj.Dice.RollD3());
+            Assert.AreEqual(3, testObj.Dice.RollD3());
+            Assert.AreEqual(3, testObj.Dice.RollD3());
+            Assert.AreEqual(2, testObj.Dice.RollD3());
+            Assert.AreEqual(1, testObj.Dice.RollD3());
+            Assert.AreEqual(2, testObj.Dice.RollD3());
+            Assert.AreEqual(3, testObj.Dice.RollD3());
+            Assert.AreEqual(2, testObj.Dice.RollD3());
+            Assert.AreEqual(3, testObj.Dice.RollD3());
+            Assert.AreEqual(1, testObj.Dice.RollD3());
         }
 
         [TestCase]
         public void fnC()
         {
-            Assert.AreEqual(3, testObj.RollD4());
-            Assert.AreEqual(4, testObj.RollD4());
-            Assert.AreEqual(4, testObj.RollD4());
-            Assert.AreEqual(3, testObj.RollD4());
-            Assert.AreEqual(1, testObj.RollD4());
-            Assert.AreEqual(3, testObj.RollD4());
-            Assert.AreEqual(4, testObj.RollD4());
-            Assert.AreEqual(2, testObj.RollD4());
-            Assert.AreEqual(4, testObj.RollD4());
-            Assert.AreEqual(2, testObj.RollD4());
+            Assert.AreEqual(3, testObj.Dice.RollD4());
+            Assert.AreEqual(4, testObj.Dice.RollD4());
+            Assert.AreEqual(4, testObj.Dice.RollD4());
+            Assert.AreEqual(3, testObj.Dice.RollD4());
+            Assert.AreEqual(1, testObj.Dice.RollD4());
+            Assert.AreEqual(3, testObj.Dice.RollD4());
+            Assert.AreEqual(4, testObj.Dice.RollD4());
+            Assert.AreEqual(2, testObj.Dice.RollD4());
+            Assert.AreEqual(4, testObj.Dice.RollD4());
+            Assert.AreEqual(2, testObj.Dice.RollD4());
         }
 
         [TestCase]
