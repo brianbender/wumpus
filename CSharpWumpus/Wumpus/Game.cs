@@ -63,27 +63,14 @@ namespace Wumpus
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
                             _hazards.GenerateHazards(Dice);
-                            break; // 185 next j
-                        case 195:
-                            j = 1;
-                            break; // 195 for j = 1 to 6
-                        case 200:
-                            k = 1;
-                            break; // 200 for k = 1 to 6
-                        case 205:
-                            if (j == k) _nextLine = 215;
-                            break; // 205 if j = k then 215
-                        case 210:
-                            if (_hazards._currentHazards[j] == _hazards._currentHazards[k]) _nextLine = 170;
-                            break; // 210 if l(j) = l(k) then 170
-                        case 215:
-                            ++k;
-                            if (k <= 6) _nextLine = 205;
-                            break; // 215 next k
-                        case 220:
-                            ++j;
-                            if (j <= 6) _nextLine = 200;
-                            break; // 220 next j
+                            for (k = 1; k <= 6; ++k)
+                            {
+                                for (j = 1; j <= 6; ++j)
+                                {
+                                    if (j!=k && _hazards._currentHazards[j] == _hazards._currentHazards[k]) _nextLine = 170;
+                                }
+                            }
+                            break;
                         case 230:
                             aa = 5;
                             break; // 230 a = 5
