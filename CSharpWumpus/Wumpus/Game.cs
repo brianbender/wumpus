@@ -9,7 +9,7 @@ namespace Wumpus
         private readonly Stack<int> ReturnLine = new Stack<int>();
         private int _nextLine;
         private IO _io;
-        private readonly Hazards _boardPieces;
+        private readonly BoardPieces _boardPieces;
 
         int[,] exits =
                 {
@@ -25,7 +25,7 @@ namespace Wumpus
             this._io = io;
             EarlyExit = 1150;
             Dice = new Dice();
-            _boardPieces = new Hazards();
+            _boardPieces = new BoardPieces();
 
         }
 
@@ -64,7 +64,7 @@ namespace Wumpus
                             istr = GiveIntroduction(istr);
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
-                            _boardPieces.GenerateHazards(Dice);
+                            _boardPieces.GenerateBoardPieces(Dice);
                             break;
                         case 230:
                             aa = 5;
@@ -122,7 +122,7 @@ namespace Wumpus
                             _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
                             break; // 335 print "HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!"
                         case 340:
-                            _boardPieces.ResetToLastHazards();
+                            _boardPieces.ResetToLastPieces();
                             break; // 350 next j
                         case 355:
                             _io.Prompt("SAME SETUP (Y-N)");
