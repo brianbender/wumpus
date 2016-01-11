@@ -53,14 +53,9 @@ namespace Wumpus
                         case 15:
                             _io.Prompt("INSTRUCTIONS (Y-N) ");
                             istr = _io.ReadChar();
-                            if (istr == 'N' || istr == 'n') _nextLine = 35;
+                            if (!(istr == 'N' || istr == 'n'))
+                                _io.GiveInstructions();
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
-                        case 30:
-                            gosub(375, 35);
-                            break; // 30 gosub 375
-                        case 35:
-                            _nextLine = 80;
-                            break; // 35 goto 80
                         case 170:
                             j = 1;
                             break; // 170 for j = 1 to 6
@@ -171,10 +166,6 @@ namespace Wumpus
                         case 370:
                             _nextLine = 230;
                             break; // 370 goto 230
-                        case 375:
-                            _io.GiveInstructions();
-                            returnFromGosub();
-                            break; // 580 return
                         case 590:
                             _io.WriteLine("");
                             break; // 590 print
