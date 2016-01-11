@@ -140,10 +140,10 @@ namespace Wumpus
                             _io.WriteLine("");
                             break; // 590 print
                       case 605:
-                            var neihboringRooms = getNeighboringRooms();
+                            var neighboringRooms = getNeighboringRooms();
 
                             for(j = 2; j<=6; ++j)
-                                if (neihboringRooms.Contains(_boardPieces._pieces[j]))
+                                if (neighboringRooms.Contains(_boardPieces._pieces[j]))
                                     PrintNearHazard(j);
                                 
                             break; // 605 if s(l(1),k) <> l(j) then 640
