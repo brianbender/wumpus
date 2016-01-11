@@ -10,6 +10,8 @@ namespace Wumpus
         private int _nextLine;
         public Random random = new Random();
         private IO _io;
+        private int[] _currentHazards;
+        private int[] _lastHazardsGenerated;
 
         public Game(IO io)
         {
@@ -25,7 +27,7 @@ namespace Wumpus
             {
                 _currentLine = 5;
                 char istr = '\0';
-                int[,] map =
+                int[,] exits =
                 {
                     {0, 0, 0, 0},
                     {0, 2, 5, 8}, {0, 1, 3, 10}, {0, 2, 4, 12}, {0, 3, 5, 14}, {0, 1, 4, 6},
@@ -33,8 +35,8 @@ namespace Wumpus
                     {0, 10, 12, 19}, {0, 3, 11, 13}, {0, 12, 14, 20}, {0, 4, 13, 15}, {0, 6, 14, 16},
                     {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
                 };
-                int[] l = new int[7];
-                int[] m = new int[7];
+                _currentHazards = new int[7];
+                _lastHazardsGenerated = new int[7];
                 int[] p = new int[6];
                 int aa = 5;
                 int ll = aa;
@@ -51,19 +53,10 @@ namespace Wumpus
                     switch (_currentLine)
                     {
                         case 15:
-                            _io.Prompt("INSTRUCTIONS (Y-N) ");
-                            istr = _io.ReadChar();
-                            if (!(istr == 'N' || istr == 'n'))
-                                _io.GiveInstructions();
+                            istr = GiveIntroduction(istr);
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
-                            j = 1;
-                            do
-                            {
-                                l[j] = RollD20();
-                                m[j] = l[j];
-                                ++j; 
-                            } while (j <= 6);
+                            GenerateHazards(_currentHazards, _lastHazardsGenerated);
                             break; // 185 next j
                         case 195:
                             j = 1;
@@ -75,7 +68,7 @@ namespace Wumpus
                             if (j == k) _nextLine = 215;
                             break; // 205 if j = k then 215
                         case 210:
-                            if (l[j] == l[k]) _nextLine = 170;
+                            if (_currentHazards[j] == _currentHazards[k]) _nextLine = 170;
                             break; // 210 if l(j) = l(k) then 170
                         case 215:
                             ++k;
@@ -89,7 +82,7 @@ namespace Wumpus
                             aa = 5;
                             break; // 230 a = 5
                         case 235:
-                            ll = l[1];
+                            ll = _currentHazards[1];
                             break; // 235 l = l(1)
                         case 245:
                             _io.WriteLine("HUNT THE WUMPUS");
@@ -144,7 +137,7 @@ namespace Wumpus
                             j = 1;
                             break; // 340 for j = 1 to 6
                         case 345:
-                            l[j] = m[j];
+                            _currentHazards[j] = _lastHazardsGenerated[j];
                             break; // 345 l(j) = m(j)
                         case 350:
                             ++j;
@@ -172,7 +165,7 @@ namespace Wumpus
                             k = 1;
                             break; // 600 for k = 1 to 3
                         case 605:
-                            if (map[l[1], k] != l[j]) _nextLine = 640;
+                            if (exits[_currentHazards[1], k] != _currentHazards[j]) _nextLine = 640;
                             break; // 605 if s(l(1),k) <> l(j) then 640
                         case 610:
                             switch (j - 1)
@@ -217,15 +210,15 @@ namespace Wumpus
                             break; // 645 next j
                         case 650:
                             _io.Prompt("YOUR ARE IN ROOM ");
-                            _io.WriteLine(l[1].ToString());
+                            _io.WriteLine(_currentHazards[1].ToString());
                             break; // 650 print "YOU ARE IN ROOM ";l(1)
                         case 655:
                             _io.Prompt("TUNNELS LEAD TO ");
-                            _io.Prompt(map[ll, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
+                            _io.Prompt(exits[ll, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
                             _io.Prompt(" ");
-                            _io.Prompt(map[ll, 2].ToString());
+                            _io.Prompt(exits[ll, 2].ToString());
                             _io.Prompt(" ");
-                            _io.WriteLine(map[ll, 3].ToString());
+                            _io.WriteLine(exits[ll, 3].ToString());
                             break;
                         case 660:
                             _io.WriteLine("");
@@ -298,7 +291,7 @@ namespace Wumpus
                             if (k <= j9) _nextLine = 760;
                             break; // 790 next k
                         case 800:
-                            ll = l[1];
+                            ll = _currentHazards[1];
                             break; // 800 l = l(1)
                         case 805:
                             k = 1;
@@ -307,14 +300,14 @@ namespace Wumpus
                             k1 = 1;
                             break; // 810 for k1 = 1 to 3
                         case 815:
-                            if (map[ll, k1] == p[k]) _nextLine = 895;
+                            if (exits[ll, k1] == p[k]) _nextLine = 895;
                             break; // 815 if s(l,k1) = p(k) then 895
                         case 820:
                             ++k1;
                             if (k1 <= 3) _nextLine = 815;
                             break; // 820 next k1
                         case 830:
-                            ll = map[ll, RollD3()];
+                            ll = exits[ll, RollD3()];
                             break; // 830 l = s(l,fnb(1))
                         case 835:
                             _nextLine = 900;
@@ -327,7 +320,7 @@ namespace Wumpus
                             _io.WriteLine("MISSED");
                             break; // 845 print "MISSED"
                         case 850:
-                            ll = l[1];
+                            ll = _currentHazards[1];
                             break; // 850 l = l(1)
                         case 860:
                             gosub(935, 865);
@@ -348,7 +341,7 @@ namespace Wumpus
                             ll = p[k];
                             break; // 895 l = p(k)
                         case 900:
-                            if (ll != l[2]) _nextLine = 920;
+                            if (ll != _currentHazards[2]) _nextLine = 920;
                             break; // 900 if l <> l(2) then 920
                         case 905:
                             _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
@@ -360,7 +353,7 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 915 return
                         case 920:
-                            if (ll != l[1]) _nextLine = 840;
+                            if (ll != _currentHazards[1]) _nextLine = 840;
                             break; // 920 if l <> l(1) then 840
                         case 925:
                             _io.WriteLine("OUCH! ARROW GOT YOU!");
@@ -375,10 +368,10 @@ namespace Wumpus
                             if (k == 4) _nextLine = 955;
                             break; // 945 if k = 4 then 955
                         case 950:
-                            l[2] = map[l[2], k];
+                            _currentHazards[2] = exits[_currentHazards[2], k];
                             break; // 950 l(2) = s(l(2),k)
                         case 955:
-                            if (l[2] != ll) _nextLine = 970;
+                            if (_currentHazards[2] != ll) _nextLine = 970;
                             break; // 955 if l(2) <> l then 970
                         case 960:
                             _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
@@ -408,14 +401,14 @@ namespace Wumpus
                             k = 1;
                             break; // 1005 for k = 1 to 3
                         case 1015:
-                            if (map[l[1], k] == ll) _nextLine = 1045;
+                            if (exits[_currentHazards[1], k] == ll) _nextLine = 1045;
                             break; // 1015 if s(l(1),k) = l then 1045
                         case 1020:
                             ++k;
                             if (k <= 3) _nextLine = 1010;
                             break; // 1020 next k
                         case 1025:
-                            if (ll == l[1]) _nextLine = 1045;
+                            if (ll == _currentHazards[1]) _nextLine = 1045;
                             break; // 1025 if l = l(1) then 1045
                         case 1030:
                             _io.Prompt("NOT POSSIBLE - ");
@@ -424,10 +417,10 @@ namespace Wumpus
                             _nextLine = 985;
                             break; // 1035 goto 985
                         case 1045:
-                            l[1] = ll;
+                            _currentHazards[1] = ll;
                             break; // 1045 l(1) = l
                         case 1055:
-                            if (ll != l[2]) _nextLine = 1090;
+                            if (ll != _currentHazards[2]) _nextLine = 1090;
                             break; // 1055 if l <> l(2) then 1090
                         case 1060:
                             _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
@@ -442,10 +435,10 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 1080 return
                         case 1090:
-                            if (ll == l[3]) _nextLine = 1100;
+                            if (ll == _currentHazards[3]) _nextLine = 1100;
                             break; // 1090 if l = l(3) then 1100
                         case 1095:
-                            if (ll != l[4]) _nextLine = 1120;
+                            if (ll != _currentHazards[4]) _nextLine = 1120;
                             break; // 1095 if l <> l(4) then 1120
                         case 1100:
                             _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
@@ -457,10 +450,10 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 1110 return
                         case 1120:
-                            if (ll == l[5]) _nextLine = 1130;
+                            if (ll == _currentHazards[5]) _nextLine = 1130;
                             break; // 1120 if l = l(5) then 1130
                         case 1125:
-                            if (ll != l[6]) _nextLine = 1145;
+                            if (ll != _currentHazards[6]) _nextLine = 1145;
                             break; // 1125 if l <> l(6) then 1145
                         case 1130:
                             _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
@@ -483,6 +476,27 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private char GiveIntroduction(char istr)
+        {
+            _io.Prompt("INSTRUCTIONS (Y-N) ");
+            istr = _io.ReadChar();
+            if (!(istr == 'N' || istr == 'n'))
+                _io.GiveInstructions();
+            return istr;
+        }
+
+        private void GenerateHazards(int[] l, int[] m)
+        {
+            int hazard = 1;
+            var maxHazard = 6;
+            do
+            {
+                l[hazard] = RollD20();
+                m[hazard] = l[hazard];
+                ++hazard;
+            } while (hazard <= maxHazard);
         }
 
         private void gosub(int gosubLine, int lineToReturnTo) {
