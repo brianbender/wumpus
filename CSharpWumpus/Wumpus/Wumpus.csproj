@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ConsoleIO.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Hazards.cs" />
     <Compile Include="IO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
