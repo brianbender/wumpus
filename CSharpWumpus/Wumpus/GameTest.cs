@@ -67,46 +67,46 @@ namespace Wumpus
         [TestCase]
         public void fnA()
         {
-            Assert.AreEqual(15, testObj.fnA());
-            Assert.AreEqual(17, testObj.fnA());
-            Assert.AreEqual(16, testObj.fnA());
-            Assert.AreEqual(12, testObj.fnA());
-            Assert.AreEqual(5, testObj.fnA());
-            Assert.AreEqual(12, testObj.fnA());
-            Assert.AreEqual(19, testObj.fnA());
-            Assert.AreEqual(9, testObj.fnA());
-            Assert.AreEqual(20, testObj.fnA());
-            Assert.AreEqual(6, testObj.fnA());
+            Assert.AreEqual(15, testObj.RollD20());
+            Assert.AreEqual(17, testObj.RollD20());
+            Assert.AreEqual(16, testObj.RollD20());
+            Assert.AreEqual(12, testObj.RollD20());
+            Assert.AreEqual(5, testObj.RollD20());
+            Assert.AreEqual(12, testObj.RollD20());
+            Assert.AreEqual(19, testObj.RollD20());
+            Assert.AreEqual(9, testObj.RollD20());
+            Assert.AreEqual(20, testObj.RollD20());
+            Assert.AreEqual(6, testObj.RollD20());
         }
 
         [TestCase]
         public void fnB()
         {
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(2, testObj.fnB());
-            Assert.AreEqual(1, testObj.fnB());
-            Assert.AreEqual(2, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(2, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(1, testObj.fnB());
+            Assert.AreEqual(3, testObj.RollD3());
+            Assert.AreEqual(3, testObj.RollD3());
+            Assert.AreEqual(3, testObj.RollD3());
+            Assert.AreEqual(2, testObj.RollD3());
+            Assert.AreEqual(1, testObj.RollD3());
+            Assert.AreEqual(2, testObj.RollD3());
+            Assert.AreEqual(3, testObj.RollD3());
+            Assert.AreEqual(2, testObj.RollD3());
+            Assert.AreEqual(3, testObj.RollD3());
+            Assert.AreEqual(1, testObj.RollD3());
         }
 
         [TestCase]
         public void fnC()
         {
-            Assert.AreEqual(3, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(3, testObj.fnC());
-            Assert.AreEqual(1, testObj.fnC());
-            Assert.AreEqual(3, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(2, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(2, testObj.fnC());
+            Assert.AreEqual(3, testObj.RollD4());
+            Assert.AreEqual(4, testObj.RollD4());
+            Assert.AreEqual(4, testObj.RollD4());
+            Assert.AreEqual(3, testObj.RollD4());
+            Assert.AreEqual(1, testObj.RollD4());
+            Assert.AreEqual(3, testObj.RollD4());
+            Assert.AreEqual(4, testObj.RollD4());
+            Assert.AreEqual(2, testObj.RollD4());
+            Assert.AreEqual(4, testObj.RollD4());
+            Assert.AreEqual(2, testObj.RollD4());
         }
 
         [TestCase]

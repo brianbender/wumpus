@@ -25,7 +25,7 @@ namespace Wumpus
             {
                 _currentLine = 5;
                 char istr = '\0';
-                int[,] s =
+                int[,] map =
                 {
                     {0, 0, 0, 0},
                     {0, 2, 5, 8}, {0, 1, 3, 10}, {0, 2, 4, 12}, {0, 3, 5, 14}, {0, 1, 4, 6},
@@ -50,17 +50,9 @@ namespace Wumpus
                     _nextLine = _currentLine + 1;
                     switch (_currentLine)
                     {
-                        case 5:
-                            break; // 5 rem *** HUNT THE WUMPUS ***
-                        case 10:
-                            break; // 10 dim p(5)
                         case 15:
                             _io.Prompt("INSTRUCTIONS (Y-N) ");
-                            break; // 15 print "INSTRUCTIONS (Y-N)";
-                        case 20:
                             istr = _io.ReadChar();
-                            break; // 20 input i$
-                        case 25:
                             if (istr == 'N' || istr == 'n') _nextLine = 35;
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 30:
@@ -96,7 +88,7 @@ namespace Wumpus
                             j = 1;
                             break; // 170 for j = 1 to 6
                         case 175:
-                            l[j] = fnA();
+                            l[j] = RollD20();
                             break; // 175 l(j) = fna(0)
                         case 180:
                             m[j] = l[j];
@@ -234,7 +226,7 @@ namespace Wumpus
                             k = 1;
                             break; // 600 for k = 1 to 3
                         case 605:
-                            if (s[l[1], k] != l[j]) _nextLine = 640;
+                            if (map[l[1], k] != l[j]) _nextLine = 640;
                             break; // 605 if s(l(1),k) <> l(j) then 640
                         case 610:
                             switch (j - 1)
@@ -283,11 +275,11 @@ namespace Wumpus
                             break; // 650 print "YOU ARE IN ROOM ";l(1)
                         case 655:
                             _io.Prompt("TUNNELS LEAD TO ");
-                            _io.Prompt(s[ll, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
+                            _io.Prompt(map[ll, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
                             _io.Prompt(" ");
-                            _io.Prompt(s[ll, 2].ToString());
+                            _io.Prompt(map[ll, 2].ToString());
                             _io.Prompt(" ");
-                            _io.WriteLine(s[ll, 3].ToString());
+                            _io.WriteLine(map[ll, 3].ToString());
                             break;
                         case 660:
                             _io.WriteLine("");
@@ -377,7 +369,7 @@ namespace Wumpus
                             k1 = 1;
                             break; // 810 for k1 = 1 to 3
                         case 815:
-                            if (s[ll, k1] == p[k]) _nextLine = 895;
+                            if (map[ll, k1] == p[k]) _nextLine = 895;
                             break; // 815 if s(l,k1) = p(k) then 895
                         case 820:
                             ++k1;
@@ -386,7 +378,7 @@ namespace Wumpus
                         case 825:
                             break; // 825 rem *** NO TUNNEL FOR ARROW ***
                         case 830:
-                            ll = s[ll, fnB()];
+                            ll = map[ll, RollD3()];
                             break; // 830 l = s(l,fnb(1))
                         case 835:
                             _nextLine = 900;
@@ -449,13 +441,13 @@ namespace Wumpus
                         case 935:
                             break; // 935 rem *** MOVE WUMPUS ROUTINE ***
                         case 940:
-                            k = fnC();
+                            k = RollD4();
                             break; // 940 k = fnc(0)
                         case 945:
                             if (k == 4) _nextLine = 955;
                             break; // 945 if k = 4 then 955
                         case 950:
-                            l[2] = s[l[2], k];
+                            l[2] = map[l[2], k];
                             break; // 950 l(2) = s(l(2),k)
                         case 955:
                             if (l[2] != ll) _nextLine = 970;
@@ -492,7 +484,7 @@ namespace Wumpus
                         case 1010:
                             break; // 1010 rem *** CHECK IF LEGAL MOVE ***
                         case 1015:
-                            if (s[l[1], k] == ll) _nextLine = 1045;
+                            if (map[l[1], k] == ll) _nextLine = 1045;
                             break; // 1015 if s(l(1),k) = l then 1045
                         case 1020:
                             ++k;
@@ -560,7 +552,7 @@ namespace Wumpus
                             _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
                             break; // 1130 print "ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!"
                         case 1135:
-                            ll = fnA();
+                            ll = RollD20();
                             break; // 1135 l = fna(1)
                         case 1140:
                             _nextLine = 1045;
@@ -593,15 +585,15 @@ namespace Wumpus
                 _nextLine = ReturnLine.Pop();
         }
 
-        public int fnA() {
+        public int RollD20() {
             return random.Next(20) + 1;
         }
 
-        public int fnB() {
+        public int RollD3() {
             return random.Next(3) + 1;
         }
 
-        public int fnC() {
+        public int RollD4() {
             return random.Next(4) + 1;
         }
     }
