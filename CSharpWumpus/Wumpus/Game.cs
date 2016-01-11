@@ -74,8 +74,6 @@ namespace Wumpus
                             ++j;
                             if (j <= 6) _nextLine = 175;
                             break; // 185 next j
-                        case 190:
-                            break; // 190 rem *** CHECK FOR CROSSOVERS (IE l(1)=l(2), ETC) ***
                         case 195:
                             j = 1;
                             break; // 195 for j = 1 to 6
@@ -96,26 +94,18 @@ namespace Wumpus
                             ++j;
                             if (j <= 6) _nextLine = 200;
                             break; // 220 next j
-                        case 225:
-                            break; // 225 rem *** SET NO. OF ARROWS ***
                         case 230:
                             aa = 5;
                             break; // 230 a = 5
                         case 235:
                             ll = l[1];
                             break; // 235 l = l(1)
-                        case 240:
-                            break; // 240 rem *** RUN THE GAME ***
                         case 245:
                             _io.WriteLine("HUNT THE WUMPUS");
                             break; // 245 print "HUNT THE WUMPUS"
-                        case 250:
-                            break; // 250 rem *** HAZARD WARNING AND LOCATION ***
                         case 255:
                             gosub(585, 260);
                             break; // 255 gosub 585
-                        case 260:
-                            break; // 260 rem *** MOVE OR SHOOT ***
                         case 265:
                             gosub(670, 270);
                             break; // 265 gosub 670
@@ -130,8 +120,6 @@ namespace Wumpus
                                     break;
                             }
                             break; // 270 on o goto 280,300
-                        case 275:
-                            break; // 275 rem *** SHOOT ***
                         case 280:
                             gosub(715, 285);
                             break; // 280 gosub 715
@@ -141,8 +129,6 @@ namespace Wumpus
                         case 290:
                             _nextLine = 310;
                             break; // 290 goto 310
-                        case 295:
-                            break; // 295 rem *** MOVE ***
                         case 300:
                             gosub(975, 305);
                             break; // 300 gosub 975
@@ -160,8 +146,6 @@ namespace Wumpus
                         case 325:
                             _nextLine = 340;
                             break; // 325 goto 340
-                        case 330:
-                            break; // 330 rem *** WIN ***
                         case 335:
                             _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
                             break; // 335 print "HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!"
@@ -191,8 +175,6 @@ namespace Wumpus
                             _io.GiveInstructions();
                             returnFromGosub();
                             break; // 580 return
-                        case 585:
-                            break; // 585 rem *** PRINT LOCATION & HAZARD WARNINGS ***
                         case 590:
                             _io.WriteLine("");
                             break; // 590 print
@@ -264,8 +246,6 @@ namespace Wumpus
                         case 665:
                             returnFromGosub();
                             break; // 665 return
-                        case 670:
-                            break; // 670 rem *** CHOOSE OPTION ***
                         case 675:
                             _io.Prompt("SHOOT OR MOVE (S-M) ");
                             break; // 675 print "SHOOT OR MOVE (S-M)";
@@ -290,13 +270,9 @@ namespace Wumpus
                         case 710:
                             returnFromGosub();
                             break; // 710 return
-                        case 715:
-                            break; // 715 rem *** ARROW ROUTINE ***
                         case 720:
                             f = 0;
                             break; // 720 f = 0
-                        case 725:
-                            break; // 725 rem *** PATH OF ARROW ***
                         case 735:
                             _io.Prompt("NO. OF ROOMS (1-5) ");
                             break; // 735 print "NO. OF ROOMS (1-5)";
@@ -334,8 +310,6 @@ namespace Wumpus
                             ++k;
                             if (k <= j9) _nextLine = 760;
                             break; // 790 next k
-                        case 795:
-                            break; // 795 rem *** SHOOT ARROW ***
                         case 800:
                             ll = l[1];
                             break; // 800 l = l(1)
@@ -352,8 +326,6 @@ namespace Wumpus
                             ++k1;
                             if (k1 <= 3) _nextLine = 815;
                             break; // 820 next k1
-                        case 825:
-                            break; // 825 rem *** NO TUNNEL FOR ARROW ***
                         case 830:
                             ll = map[ll, RollD3()];
                             break; // 830 l = s(l,fnb(1))
@@ -370,13 +342,9 @@ namespace Wumpus
                         case 850:
                             ll = l[1];
                             break; // 850 l = l(1)
-                        case 855:
-                            break; // 855 rem *** MOVE WUMPUS ***
                         case 860:
                             gosub(935, 865);
                             break; // 860 gosub 935
-                        case 865:
-                            break; // 865 rem *** AMMO CHECK ***
                         case 870:
                             aa = aa - 1;
                             break; // 870 a = a-1
@@ -389,8 +357,6 @@ namespace Wumpus
                         case 885:
                             returnFromGosub();
                             break; // 885 return
-                        case 890:
-                            break; // 890 rem *** SEE IF ARROW IS AT l(1) OR AT l(2)
                         case 895:
                             ll = p[k];
                             break; // 895 l = p(k)
@@ -415,8 +381,6 @@ namespace Wumpus
                         case 930:
                             _nextLine = 880;
                             break; // 930 goto 880
-                        case 935:
-                            break; // 935 rem *** MOVE WUMPUS ROUTINE ***
                         case 940:
                             k = RollD4();
                             break; // 940 k = fnc(0)
@@ -438,8 +402,6 @@ namespace Wumpus
                         case 970:
                             returnFromGosub();
                             break; // 970 return
-                        case 975:
-                            break; // 975 rem *** MOVE ROUTINE ***
                         case 980:
                             f = 0;
                             break; // 980 f = 0
@@ -458,8 +420,6 @@ namespace Wumpus
                         case 1005:
                             k = 1;
                             break; // 1005 for k = 1 to 3
-                        case 1010:
-                            break; // 1010 rem *** CHECK IF LEGAL MOVE ***
                         case 1015:
                             if (map[l[1], k] == ll) _nextLine = 1045;
                             break; // 1015 if s(l(1),k) = l then 1045
@@ -476,21 +436,15 @@ namespace Wumpus
                         case 1035:
                             _nextLine = 985;
                             break; // 1035 goto 985
-                        case 1040:
-                            break; // 1040 rem *** CHECK FOR HAZARDS ***
                         case 1045:
                             l[1] = ll;
                             break; // 1045 l(1) = l
-                        case 1050:
-                            break; // 1050 rem *** WUMPUS ***
                         case 1055:
                             if (ll != l[2]) _nextLine = 1090;
                             break; // 1055 if l <> l(2) then 1090
                         case 1060:
                             _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
                             break; // 1060 print "... OOPS! BUMPED A WUMPUS!"
-                        case 1065:
-                            break; // 1065 rem *** MOVE WUMPUS ***
                         case 1070:
                             gosub(940, 1075);
                             break; // 1070 gosub 940
@@ -500,8 +454,6 @@ namespace Wumpus
                         case 1080:
                             returnFromGosub();
                             break; // 1080 return
-                        case 1085:
-                            break; // 1085 rem *** PIT ***
                         case 1090:
                             if (ll == l[3]) _nextLine = 1100;
                             break; // 1090 if l = l(3) then 1100
@@ -517,8 +469,6 @@ namespace Wumpus
                         case 1110:
                             returnFromGosub();
                             break; // 1110 return
-                        case 1115:
-                            break; // 1115 rem *** BATS ***
                         case 1120:
                             if (ll == l[5]) _nextLine = 1130;
                             break; // 1120 if l = l(5) then 1130
@@ -537,8 +487,6 @@ namespace Wumpus
                         case 1145:
                             returnFromGosub();
                             break; // 1145 return
-                        case 1150:
-                            break; // 1150 end
                     }
                     _currentLine = _nextLine;
                 }
