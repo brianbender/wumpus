@@ -63,13 +63,6 @@ namespace Wumpus
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
                             _hazards.GenerateHazards(Dice);
-                            for (k = 1; k <= 6; ++k)
-                            {
-                                for (j = 1; j <= 6; ++j)
-                                {
-                                    if (j!=k && _hazards._currentHazards[j] == _hazards._currentHazards[k]) _nextLine = 170;
-                                }
-                            }
                             break;
                         case 230:
                             aa = 5;
