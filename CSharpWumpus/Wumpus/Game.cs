@@ -10,13 +10,12 @@ namespace Wumpus
         private int _nextLine;
         private IO _io;
         private readonly Hazards _hazards;
-        private Dice _dice;
 
         public Game(IO io)
         {
             this._io = io;
             EarlyExit = 1150;
-            _dice = new Dice();
+            Dice = new Dice();
             _hazards = new Hazards();
 
         }
@@ -25,11 +24,7 @@ namespace Wumpus
 
         public int EarlyExit { get; set; }
 
-        public Dice Dice
-        {
-            get { return _dice; }
-            set { _dice = value; }
-        }
+        public Dice Dice { get; set; }
 
 //TODO remove after refactoring so that this isn't needed by tests
 
@@ -68,7 +63,7 @@ namespace Wumpus
                             istr = GiveIntroduction(istr);
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
-                            _hazards.GenerateHazards(_hazards._currentHazards, _hazards._lastHazardsGenerated, Dice);
+                            _hazards.GenerateHazards(Dice);
                             break; // 185 next j
                         case 195:
                             j = 1;
