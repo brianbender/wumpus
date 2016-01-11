@@ -51,7 +51,6 @@ namespace Wumpus
                 int o = 1;
                 int f = 0;
 
-                int j = 0;
                 int k = 0;
                 int k1 = 0;
                 int j9 = 0;
@@ -142,7 +141,7 @@ namespace Wumpus
                       case 605:
                             var neighboringRooms = getNeighboringRooms();
 
-                            for(j = 2; j<=6; ++j)
+                            for(int j = 2; j<=6; ++j)
                                 if (neighboringRooms.Contains(_boardPieces._pieces[j]))
                                     PrintNearHazard(j);
                                 
