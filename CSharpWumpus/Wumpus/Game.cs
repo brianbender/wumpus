@@ -58,8 +58,6 @@ namespace Wumpus
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
                             j = 1;
-                            break; // 170 for j = 1 to 6
-                        case 175:
                             do
                             {
                                 l[j] = RollD20();
