@@ -9,7 +9,7 @@ namespace Wumpus
         private readonly Stack<int> ReturnLine = new Stack<int>();
         private int _nextLine;
         private IO _io;
-        private readonly Hazards _hazards;
+        private readonly Hazards _boardPieces;
 
         int[,] exits =
                 {
@@ -25,7 +25,7 @@ namespace Wumpus
             this._io = io;
             EarlyExit = 1150;
             Dice = new Dice();
-            _hazards = new Hazards();
+            _boardPieces = new Hazards();
 
         }
 
@@ -64,13 +64,13 @@ namespace Wumpus
                             istr = GiveIntroduction(istr);
                             break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
-                            _hazards.GenerateHazards(Dice);
+                            _boardPieces.GenerateHazards(Dice);
                             break;
                         case 230:
                             aa = 5;
                             break; // 230 a = 5
                         case 235:
-                            ll = _hazards._currentHazards[1];
+                            ll = _boardPieces._pieces[1];
                             break; // 235 l = l(1)
                         case 245:
                             _io.WriteLine("HUNT THE WUMPUS");
@@ -122,7 +122,7 @@ namespace Wumpus
                             _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
                             break; // 335 print "HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!"
                         case 340:
-                            _hazards.ResetToLastHazards();
+                            _boardPieces.ResetToLastHazards();
                             break; // 350 next j
                         case 355:
                             _io.Prompt("SAME SETUP (Y-N)");
@@ -143,13 +143,13 @@ namespace Wumpus
                             var neihboringRooms = getNeighboringRooms();
 
                             for(j = 2; j<=6; ++j)
-                                if (neihboringRooms.Contains(_hazards._currentHazards[j]))
+                                if (neihboringRooms.Contains(_boardPieces._pieces[j]))
                                     PrintNearHazard(j);
                                 
                             break; // 605 if s(l(1),k) <> l(j) then 640
                         case 650:
                             _io.Prompt("YOUR ARE IN ROOM ");
-                            _io.WriteLine(_hazards._currentHazards[1].ToString());
+                            _io.WriteLine(_boardPieces._pieces[1].ToString());
                             break; // 650 print "YOU ARE IN ROOM ";l(1)
                         case 655:
                             _io.Prompt("TUNNELS LEAD TO ");
@@ -230,7 +230,7 @@ namespace Wumpus
                             if (k <= j9) _nextLine = 760;
                             break; // 790 next k
                         case 800:
-                            ll = _hazards._currentHazards[1];
+                            ll = _boardPieces._pieces[1];
                             break; // 800 l = l(1)
                         case 805:
                             k = 1;
@@ -259,7 +259,7 @@ namespace Wumpus
                             _io.WriteLine("MISSED");
                             break; // 845 print "MISSED"
                         case 850:
-                            ll = _hazards._currentHazards[1];
+                            ll = _boardPieces._pieces[1];
                             break; // 850 l = l(1)
                         case 860:
                             gosub(935, 865);
@@ -280,7 +280,7 @@ namespace Wumpus
                             ll = p[k];
                             break; // 895 l = p(k)
                         case 900:
-                            if (ll != _hazards._currentHazards[2]) _nextLine = 920;
+                            if (ll != _boardPieces._pieces[2]) _nextLine = 920;
                             break; // 900 if l <> l(2) then 920
                         case 905:
                             _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
@@ -292,7 +292,7 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 915 return
                         case 920:
-                            if (ll != _hazards._currentHazards[1]) _nextLine = 840;
+                            if (ll != _boardPieces._pieces[1]) _nextLine = 840;
                             break; // 920 if l <> l(1) then 840
                         case 925:
                             _io.WriteLine("OUCH! ARROW GOT YOU!");
@@ -307,10 +307,10 @@ namespace Wumpus
                             if (k == 4) _nextLine = 955;
                             break; // 945 if k = 4 then 955
                         case 950:
-                            _hazards._currentHazards[2] = exits[_hazards._currentHazards[2], k];
+                            _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], k];
                             break; // 950 l(2) = s(l(2),k)
                         case 955:
-                            if (_hazards._currentHazards[2] != ll) _nextLine = 970;
+                            if (_boardPieces._pieces[2] != ll) _nextLine = 970;
                             break; // 955 if l(2) <> l then 970
                         case 960:
                             _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
@@ -340,14 +340,14 @@ namespace Wumpus
                             k = 1;
                             break; // 1005 for k = 1 to 3
                         case 1015:
-                            if (exits[_hazards._currentHazards[1], k] == ll) _nextLine = 1045;
+                            if (exits[_boardPieces._pieces[1], k] == ll) _nextLine = 1045;
                             break; // 1015 if s(l(1),k) = l then 1045
                         case 1020:
                             ++k;
                             if (k <= 3) _nextLine = 1010;
                             break; // 1020 next k
                         case 1025:
-                            if (ll == _hazards._currentHazards[1]) _nextLine = 1045;
+                            if (ll == _boardPieces._pieces[1]) _nextLine = 1045;
                             break; // 1025 if l = l(1) then 1045
                         case 1030:
                             _io.Prompt("NOT POSSIBLE - ");
@@ -356,10 +356,10 @@ namespace Wumpus
                             _nextLine = 985;
                             break; // 1035 goto 985
                         case 1045:
-                            _hazards._currentHazards[1] = ll;
+                            _boardPieces._pieces[1] = ll;
                             break; // 1045 l(1) = l
                         case 1055:
-                            if (ll != _hazards._currentHazards[2]) _nextLine = 1090;
+                            if (ll != _boardPieces._pieces[2]) _nextLine = 1090;
                             break; // 1055 if l <> l(2) then 1090
                         case 1060:
                             _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
@@ -374,10 +374,10 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 1080 return
                         case 1090:
-                            if (ll == _hazards._currentHazards[3]) _nextLine = 1100;
+                            if (ll == _boardPieces._pieces[3]) _nextLine = 1100;
                             break; // 1090 if l = l(3) then 1100
                         case 1095:
-                            if (ll != _hazards._currentHazards[4]) _nextLine = 1120;
+                            if (ll != _boardPieces._pieces[4]) _nextLine = 1120;
                             break; // 1095 if l <> l(4) then 1120
                         case 1100:
                             _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
@@ -389,10 +389,10 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 1110 return
                         case 1120:
-                            if (ll == _hazards._currentHazards[5]) _nextLine = 1130;
+                            if (ll == _boardPieces._pieces[5]) _nextLine = 1130;
                             break; // 1120 if l = l(5) then 1130
                         case 1125:
-                            if (ll != _hazards._currentHazards[6]) _nextLine = 1145;
+                            if (ll != _boardPieces._pieces[6]) _nextLine = 1145;
                             break; // 1125 if l <> l(6) then 1145
                         case 1130:
                             _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
@@ -427,7 +427,7 @@ namespace Wumpus
 
         private int GetPlayerLocation()
         {
-            return _hazards._currentHazards[1];
+            return _boardPieces._pieces[1];
         }
 
         private void PrintNearHazard(int j)
