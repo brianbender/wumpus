@@ -147,38 +147,8 @@ namespace Wumpus
                             if (exits[_hazards._currentHazards[1], k] != _hazards._currentHazards[j]) _nextLine = 640;
                             break; // 605 if s(l(1),k) <> l(j) then 640
                         case 610:
-                            switch (j - 1)
-                            {
-                                // 610 on j-1 goto 615,625,625,635,635
-                                case 1:
-                                    _nextLine = 615;
-                                    break;
-                                case 2:
-                                case 3:
-                                    _nextLine = 625;
-                                    break;
-                                case 4:
-                                case 5:
-                                    _nextLine = 635;
-                                    break;
-                            }
-                            ;
+                            PrintNearHazard(j);
                             break;
-                        case 615:
-                            _io.WriteLine("I SMELL A WUMPUS!");
-                            break; // 615 print "I SMELL A WUMPUS!"
-                        case 620:
-                            _nextLine = 640;
-                            break; // 620 goto 640
-                        case 625:
-                            _io.WriteLine("I FEEL A DRAFT");
-                            break; // 625 print "I FEEL A DRAFT"
-                        case 630:
-                            _nextLine = 640;
-                            break; // 630 goto 640
-                        case 635:
-                            _io.WriteLine("BATS NEARBY!");
-                            break; // 635 print "BATS NEARBY!"
                         case 640:
                             ++k;
                             if (k <= 3) _nextLine = 605;
@@ -455,6 +425,40 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void PrintNearHazard(int j)
+        {
+            switch (j - 1)
+            {
+                // 610 on j-1 goto 615,625,625,635,635
+                case 1:
+                    NearAWumpus();
+                    break;
+                case 2:
+                case 3:
+                    NearAPit();
+                    break;
+                case 4:
+                case 5:
+                    NearBats();
+                    break;
+            }
+        }
+
+        private void NearBats()
+        {
+            _io.WriteLine("BATS NEARBY!");
+        }
+
+        private void NearAPit()
+        {
+            _io.WriteLine("I FEEL A DRAFT");
+        }
+
+        private void NearAWumpus()
+        {
+            _io.WriteLine("I SMELL A WUMPUS!");
         }
 
         private char GiveIntroduction(char istr)
