@@ -116,29 +116,12 @@ namespace Wumpus
                             if (_gameOverStatus == 0) _nextLine = 255;
                             break; // 305 if f = 0 then 255
                         case 310:
-                            if (_gameOverStatus > 0) _nextLine = 335;
-                            break; // 310 if f > 0 then 335
-                        case 315:
-                            break; // 315 rem *** LOSE ***
-                        case 320:
-                            _io.WriteLine("HA HA HA - YOU LOSE!");
-                            break; // 320 print "HA HA HA - YOU LOSE!"
-                        case 325:
-                            _nextLine = 340;
-                            break; // 325 goto 340
-                        case 335:
-                            _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
-                            break; // 335 print "HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!"
-                        case 340:
+                            HandleGameOver();
                             _boardPieces.ResetToLastPieces();
                             break; // 350 next j
                         case 355:
                             _io.Prompt("SAME SETUP (Y-N)");
-                            break; // 355 print "SAME SETUP (Y-N)";
-                        case 360:
                             _istr = _io.ReadChar();
-                            break; // 360 input i$
-                        case 365:
                             if (_istr != 'Y' && _istr != 'y') _nextLine = 170;
                             break; // 365 if (i$ <> "Y") and (i$ <> "y") then 170
                         case 370:
@@ -245,12 +228,11 @@ namespace Wumpus
                             break;
                         case 920:
                             if (_ll != _boardPieces._pieces[1]) _nextLine = 840;
-                            break; // 920 if l <> l(1) then 840
-                        case 925:
-                            _io.WriteLine("OUCH! ARROW GOT YOU!");
-                            break; // 925 print "OUCH! ARROW GOT YOU!"
-                        case 930:
-                            _nextLine = 880;
+                            else
+                            {
+                                _io.WriteLine("OUCH! ARROW GOT YOU!");
+                                _nextLine = 880;
+                            }
                             break; // 930 goto 880
                         case 940:
                             // Wumpus movement
@@ -346,6 +328,12 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void HandleGameOver()
+        {
+            if (_gameOverStatus > 0) _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
+            else _io.WriteLine("HA HA HA - YOU LOSE!");
         }
 
         private bool CanArrowGoToNextRoom()
