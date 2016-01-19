@@ -256,30 +256,15 @@ namespace Wumpus
                             break; // 930 goto 880
                         case 940:
                             // Wumpus movement
-                            _pathIndex = Dice.RollD4();
-                            if (_pathIndex != 4) 
-                                _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], _pathIndex];
-                            if (_boardPieces._pieces[2] == _ll) { 
-                                _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
-                                _gameOverStatus = -1;
-                            }
+                            MoveWumpus();
                             returnFromGosub();
                             break; // 970 return
                         case 980:
                             _gameOverStatus = 0;
                             break; // 980 f = 0
                         case 985:
-                            _io.Prompt("WHERE TO ");
-                            break; // 985 print "WHERE TO";
-                        case 990:
-                            _ll = _io.readInt();
-                            break; // 990 input l
-                        case 995:
-                            if (_ll < 1) _nextLine = 985;
-                            break; // 995 if l < 1 then 985
-                        case 1000:
-                            if (_ll > 20) _nextLine = 985;
-                            break; // 1000 if l > 20 then 985
+                            GetARoom();
+                            break;
                         case 1005:
                             _pathIndex = 1;
                             break; // 1005 for k = 1 to 3
@@ -358,6 +343,27 @@ namespace Wumpus
             {
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
+            }
+        }
+
+        private void GetARoom()
+        {
+            do
+            {
+                _io.Prompt("WHERE TO ");
+                _ll = _io.readInt();
+            } while (((_ll < 1) || (_ll > 20)));
+        }
+
+        private void MoveWumpus()
+        {
+            _pathIndex = Dice.RollD4();
+            if (_pathIndex != 4)
+                _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], _pathIndex];
+            if (_boardPieces._pieces[2] == _ll)
+            {
+                _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
+                _gameOverStatus = -1;
             }
         }
 
