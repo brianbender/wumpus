@@ -198,14 +198,7 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 710 return
                         case 720:
-                            _f = 0;
-                            break; // 720 f = 0
-                        case 735:
-                            do
-                            {
-                                _io.Prompt("NO. OF ROOMS (1-5) ");
-                                _inputInteger = _io.readInt();
-                            } while (_inputInteger > 5 || _inputInteger < 1);
+                            PromptArrowDistance();
                             break;
                         case 755:
                             _k = 1;
@@ -418,6 +411,16 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void PromptArrowDistance()
+        {
+            _f = 0;
+            do
+            {
+                _io.Prompt("NO. OF ROOMS (1-5) ");
+                _inputInteger = _io.readInt();
+            } while (_inputInteger > 5 || _inputInteger < 1);
         }
 
         private List<int> getNeighboringRooms()
