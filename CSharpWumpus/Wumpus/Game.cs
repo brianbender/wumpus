@@ -200,11 +200,7 @@ namespace Wumpus
                         case 720:
                             PromptForArrowDistance();
                             PromptForArrowPath();
-                            break; // 770 if k <= 2 then 790
-                        case 800:
                             _ll = _boardPieces._pieces[1];
-                            break; // 800 l = l(1)
-                        case 805:
                             _pathIndex = 1;
                             break; // 805 for k = 1 to j9
                         case 810:
