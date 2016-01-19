@@ -198,20 +198,8 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 710 return
                         case 720:
-                            PromptArrowDistance();
-                            break;
-                        case 755:
-                            break; // 755 for k = 1 to j9
-                        case 760:
-                            for (_pathIndex = 1; _pathIndex <= _inputInteger; ++_pathIndex) { 
-                                do
-                                {
-                                    _io.Prompt("ROOM # ");
-                                    _arrowFiringPath[_pathIndex] = _io.readInt();
-                                    if(InvalidArrowPath())
-                                        _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
-                                } while (InvalidArrowPath());
-                            }
+                            PromptForArrowDistance();
+                            PromptForArrowPath();
                             break; // 770 if k <= 2 then 790
                         case 800:
                             _ll = _boardPieces._pieces[1];
@@ -401,12 +389,26 @@ namespace Wumpus
             }
         }
 
+        private void PromptForArrowPath()
+        {
+            for (_pathIndex = 1; _pathIndex <= _inputInteger; ++_pathIndex)
+            {
+                do
+                {
+                    _io.Prompt("ROOM # ");
+                    _arrowFiringPath[_pathIndex] = _io.readInt();
+                    if (InvalidArrowPath())
+                        _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
+                } while (InvalidArrowPath());
+            }
+        }
+
         private bool InvalidArrowPath()
         {
             return _pathIndex > 2 && _arrowFiringPath[_pathIndex] == _arrowFiringPath[_pathIndex - 2];
         }
 
-        private void PromptArrowDistance()
+        private void PromptForArrowDistance()
         {
             _f = 0;
             do
