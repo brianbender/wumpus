@@ -238,7 +238,7 @@ namespace Wumpus
                             break; // 885 return
                         case 895:
                             _ll = _arrowFiringPath[_pathIndex];
-                            if (_ll == _boardPieces._pieces[2])
+                            if (YouShotTheWumpusWithAnArrow(_boardPieces, _arrowFiringPath[_pathIndex]))
                             {
                                 _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
                                 _gameOverStatus = 1;
@@ -255,24 +255,14 @@ namespace Wumpus
                             _nextLine = 880;
                             break; // 930 goto 880
                         case 940:
+                            // Wumpus movement
                             _pathIndex = Dice.RollD4();
-                            break; // 940 k = fnc(0)
-                        case 945:
-                            if (_pathIndex == 4) _nextLine = 955;
-                            break; // 945 if k = 4 then 955
-                        case 950:
-                            _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], _pathIndex];
-                            break; // 950 l(2) = s(l(2),k)
-                        case 955:
-                            if (_boardPieces._pieces[2] != _ll) _nextLine = 970;
-                            break; // 955 if l(2) <> l then 970
-                        case 960:
-                            _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
-                            break; // 960 print "TSK TSK TSK - WUMPUS GOT YOU!"
-                        case 965:
-                            _gameOverStatus = -1;
-                            break; // 965 f = -1
-                        case 970:
+                            if (_pathIndex != 4) 
+                                _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], _pathIndex];
+                            if (_boardPieces._pieces[2] == _ll) { 
+                                _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
+                                _gameOverStatus = -1;
+                            }
                             returnFromGosub();
                             break; // 970 return
                         case 980:
@@ -369,6 +359,11 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private static bool YouShotTheWumpusWithAnArrow(BoardPieces boardPieces, int ll)
+        {
+            return ll == boardPieces._pieces[2];
         }
 
         private void PromptForArrowPath()
