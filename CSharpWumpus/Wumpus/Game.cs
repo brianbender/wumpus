@@ -26,7 +26,7 @@ namespace Wumpus
         private int _ll;
         private int _o;
         private int _f;
-        private int _k;
+        private int _pathIndex;
         private int _k1;
         private char _istr;
 
@@ -59,7 +59,7 @@ namespace Wumpus
                 _o = 1;
                 _f = 0;
 
-                _k = 0;
+                _pathIndex = 0;
                 _k1 = 0;
                 _inputInteger = 0;
                 while (_currentLine <= 1150 && EarlyExit != _currentLine)
@@ -201,32 +201,29 @@ namespace Wumpus
                             PromptArrowDistance();
                             break;
                         case 755:
-                            _k = 1;
                             break; // 755 for k = 1 to j9
                         case 760:
-                            do
-                            {
-                                _io.Prompt("ROOM # ");
-                                _arrowFiringPath[_k] = _io.readInt();
-                                if(InvalidArrowPath())
-                                    _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
-                            } while (InvalidArrowPath());
+                            for (_pathIndex = 1; _pathIndex <= _inputInteger; ++_pathIndex) { 
+                                do
+                                {
+                                    _io.Prompt("ROOM # ");
+                                    _arrowFiringPath[_pathIndex] = _io.readInt();
+                                    if(InvalidArrowPath())
+                                        _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
+                                } while (InvalidArrowPath());
+                            }
                             break; // 770 if k <= 2 then 790
-                        case 790:
-                            ++_k;
-                            if (_k <= _inputInteger) _nextLine = 760;
-                            break; // 790 next k
                         case 800:
                             _ll = _boardPieces._pieces[1];
                             break; // 800 l = l(1)
                         case 805:
-                            _k = 1;
+                            _pathIndex = 1;
                             break; // 805 for k = 1 to j9
                         case 810:
                             _k1 = 1;
                             break; // 810 for k1 = 1 to 3
                         case 815:
-                            if (exits[_ll, _k1] == _arrowFiringPath[_k]) _nextLine = 895;
+                            if (exits[_ll, _k1] == _arrowFiringPath[_pathIndex]) _nextLine = 895;
                             break; // 815 if s(l,k1) = p(k) then 895
                         case 820:
                             ++_k1;
@@ -239,8 +236,8 @@ namespace Wumpus
                             _nextLine = 900;
                             break; // 835 goto 900
                         case 840:
-                            ++_k;
-                            if (_k <= _inputInteger) _nextLine = 810;
+                            ++_pathIndex;
+                            if (_pathIndex <= _inputInteger) _nextLine = 810;
                             break; // 840 next k
                         case 845:
                             _io.WriteLine("MISSED");
@@ -264,7 +261,7 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 885 return
                         case 895:
-                            _ll = _arrowFiringPath[_k];
+                            _ll = _arrowFiringPath[_pathIndex];
                             break; // 895 l = p(k)
                         case 900:
                             if (_ll != _boardPieces._pieces[2]) _nextLine = 920;
@@ -288,13 +285,13 @@ namespace Wumpus
                             _nextLine = 880;
                             break; // 930 goto 880
                         case 940:
-                            _k = Dice.RollD4();
+                            _pathIndex = Dice.RollD4();
                             break; // 940 k = fnc(0)
                         case 945:
-                            if (_k == 4) _nextLine = 955;
+                            if (_pathIndex == 4) _nextLine = 955;
                             break; // 945 if k = 4 then 955
                         case 950:
-                            _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], _k];
+                            _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], _pathIndex];
                             break; // 950 l(2) = s(l(2),k)
                         case 955:
                             if (_boardPieces._pieces[2] != _ll) _nextLine = 970;
@@ -324,14 +321,14 @@ namespace Wumpus
                             if (_ll > 20) _nextLine = 985;
                             break; // 1000 if l > 20 then 985
                         case 1005:
-                            _k = 1;
+                            _pathIndex = 1;
                             break; // 1005 for k = 1 to 3
                         case 1015:
-                            if (exits[_boardPieces._pieces[1], _k] == _ll) _nextLine = 1045;
+                            if (exits[_boardPieces._pieces[1], _pathIndex] == _ll) _nextLine = 1045;
                             break; // 1015 if s(l(1),k) = l then 1045
                         case 1020:
-                            ++_k;
-                            if (_k <= 3) _nextLine = 1010;
+                            ++_pathIndex;
+                            if (_pathIndex <= 3) _nextLine = 1010;
                             break; // 1020 next k
                         case 1025:
                             if (_ll == _boardPieces._pieces[1]) _nextLine = 1045;
@@ -406,7 +403,7 @@ namespace Wumpus
 
         private bool InvalidArrowPath()
         {
-            return _k > 2 && _arrowFiringPath[_k] == _arrowFiringPath[_k - 2];
+            return _pathIndex > 2 && _arrowFiringPath[_pathIndex] == _arrowFiringPath[_pathIndex - 2];
         }
 
         private void PromptArrowDistance()
