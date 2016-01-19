@@ -223,7 +223,6 @@ namespace Wumpus
                                 }
                             }
                             break; // 770 if k <= 2 then 790
-                        case 775:
                         case 790:
                             ++_k;
                             if (_k <= _inputInteger) _nextLine = 760;
