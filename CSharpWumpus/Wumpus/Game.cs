@@ -204,24 +204,13 @@ namespace Wumpus
                             _k = 1;
                             break; // 755 for k = 1 to j9
                         case 760:
-                            _io.Prompt("ROOM # ");
-                            break; // 760 print "ROOM #";
-                        case 765:
-                            _arrowFiringPath[_k] = _io.readInt();
-                            break; // 765 input p(k)
-                        case 770:
-                            if (_k <= 2)
-                                _nextLine = 790;
-                            else
+                            do
                             {
-                                if (_arrowFiringPath[_k] != _arrowFiringPath[_k - 2])
-                                    _nextLine = 790;
-                                else
-                                {
+                                _io.Prompt("ROOM # ");
+                                _arrowFiringPath[_k] = _io.readInt();
+                                if(InvalidArrowPath())
                                     _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
-                                    _nextLine = 760;
-                                }
-                            }
+                            } while (InvalidArrowPath());
                             break; // 770 if k <= 2 then 790
                         case 790:
                             ++_k;
@@ -413,6 +402,11 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private bool InvalidArrowPath()
+        {
+            return _k > 2 && _arrowFiringPath[_k] == _arrowFiringPath[_k - 2];
         }
 
         private void PromptArrowDistance()
