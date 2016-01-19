@@ -25,7 +25,7 @@ namespace Wumpus
         private int _arrowsLeft;
         private int _ll;
         private int _o;
-        private int _f;
+        private int _gameOverStatus;
         private int _pathIndex;
         private int _k1;
         private char _istr;
@@ -57,7 +57,7 @@ namespace Wumpus
                 _arrowsLeft = 5;
                 _ll = _arrowsLeft;
                 _o = 1;
-                _f = 0;
+                _gameOverStatus = 0;
 
                 _pathIndex = 0;
                 _k1 = 0;
@@ -103,7 +103,7 @@ namespace Wumpus
                             gosub(715, 285);
                             break; // 280 gosub 715
                         case 285:
-                            if (_f == 0) _nextLine = 255;
+                            if (_gameOverStatus == 0) _nextLine = 255;
                             break; // 285 if f = 0 then 255
                         case 290:
                             _nextLine = 310;
@@ -112,10 +112,10 @@ namespace Wumpus
                             gosub(975, 305);
                             break; // 300 gosub 975
                         case 305:
-                            if (_f == 0) _nextLine = 255;
+                            if (_gameOverStatus == 0) _nextLine = 255;
                             break; // 305 if f = 0 then 255
                         case 310:
-                            if (_f > 0) _nextLine = 335;
+                            if (_gameOverStatus > 0) _nextLine = 335;
                             break; // 310 if f > 0 then 335
                         case 315:
                             break; // 315 rem *** LOSE ***
@@ -225,40 +225,26 @@ namespace Wumpus
                             break; // 840 next k
                         case 845:
                             _io.WriteLine("MISSED");
-                            break; // 845 print "MISSED"
-                        case 850:
                             _ll = _boardPieces._pieces[1];
-                            break; // 850 l = l(1)
-                        case 860:
                             gosub(935, 865);
                             break; // 860 gosub 935
                         case 870:
                             _arrowsLeft = _arrowsLeft - 1;
-                            break; // 870 a = a-1
-                        case 875:
-                            if (_arrowsLeft > 0) _nextLine = 885;
+                            if (_arrowsLeft > 0) returnFromGosub();
                             break; // 875 if a > 0 then 885
                         case 880:
-                            _f = -1;
-                            break; // 880 f = -1
-                        case 885:
+                            _gameOverStatus = -1;
                             returnFromGosub();
                             break; // 885 return
                         case 895:
                             _ll = _arrowFiringPath[_pathIndex];
-                            break; // 895 l = p(k)
-                        case 900:
-                            if (_ll != _boardPieces._pieces[2]) _nextLine = 920;
-                            break; // 900 if l <> l(2) then 920
-                        case 905:
-                            _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
-                            break; // 905 print "AHA! YOU GOT THE WUMPUS!"
-                        case 910:
-                            _f = 1;
-                            break; // 910 f = 1
-                        case 915:
-                            returnFromGosub();
-                            break; // 915 return
+                            if (_ll == _boardPieces._pieces[2])
+                            {
+                                _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
+                                _gameOverStatus = 1;
+                                returnFromGosub();
+                            }
+                            break;
                         case 920:
                             if (_ll != _boardPieces._pieces[1]) _nextLine = 840;
                             break; // 920 if l <> l(1) then 840
@@ -284,13 +270,13 @@ namespace Wumpus
                             _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
                             break; // 960 print "TSK TSK TSK - WUMPUS GOT YOU!"
                         case 965:
-                            _f = -1;
+                            _gameOverStatus = -1;
                             break; // 965 f = -1
                         case 970:
                             returnFromGosub();
                             break; // 970 return
                         case 980:
-                            _f = 0;
+                            _gameOverStatus = 0;
                             break; // 980 f = 0
                         case 985:
                             _io.Prompt("WHERE TO ");
@@ -336,7 +322,7 @@ namespace Wumpus
                             gosub(940, 1075);
                             break; // 1070 gosub 940
                         case 1075:
-                            if (_f == 0) _nextLine = 1090;
+                            if (_gameOverStatus == 0) _nextLine = 1090;
                             break; // 1075 if f = 0 then 1090
                         case 1080:
                             returnFromGosub();
@@ -351,7 +337,7 @@ namespace Wumpus
                             _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
                             break; // 1100 print "YYYYIIIIEEEE . . . FELL IN PIT"
                         case 1105:
-                            _f = -1;
+                            _gameOverStatus = -1;
                             break; // 1105 f = -1
                         case 1110:
                             returnFromGosub();
@@ -406,7 +392,7 @@ namespace Wumpus
 
         private void PromptForArrowDistance()
         {
-            _f = 0;
+            _gameOverStatus = 0;
             do
             {
                 _io.Prompt("NO. OF ROOMS (1-5) ");
