@@ -210,17 +210,20 @@ namespace Wumpus
                             _arrowFiringPath[_k] = _io.readInt();
                             break; // 765 input p(k)
                         case 770:
-                            if (_k <= 2) _nextLine = 790;
+                            if (_k <= 2)
+                                _nextLine = 790;
+                            else
+                            {
+                                if (_arrowFiringPath[_k] != _arrowFiringPath[_k - 2])
+                                    _nextLine = 790;
+                                else
+                                {
+                                    _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
+                                    _nextLine = 760;
+                                }
+                            }
                             break; // 770 if k <= 2 then 790
                         case 775:
-                            if (_arrowFiringPath[_k] != _arrowFiringPath[_k - 2]) _nextLine = 790;
-                            break; // 775 if p(k) <> p(k-2) then 790
-                        case 780:
-                            _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
-                            break; // 780 print "ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM"
-                        case 785:
-                            _nextLine = 760;
-                            break; // 785 goto 760
                         case 790:
                             ++_k;
                             if (_k <= _inputInteger) _nextLine = 760;
