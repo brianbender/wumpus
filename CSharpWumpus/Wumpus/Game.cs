@@ -6,10 +6,7 @@ namespace Wumpus
     public class Game
     {
         private readonly BoardPieces _boardPieces;
-        private readonly Stack<int> ReturnLine = new Stack<int>();
-        private int _currentLine;
         private readonly IO _io;
-        private int _nextLine;
 
         private readonly int[,] exits =
         {
@@ -20,15 +17,19 @@ namespace Wumpus
             {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
         };
 
-        private int _inputInteger;
+        private readonly Stack<int> ReturnLine = new Stack<int>();
         private int[] _arrowFiringPath;
         private int _arrowsLeft;
-        private int _ll;
-        private int _o;
+        private int _currentLine;
         private int _gameOverStatus;
-        private int _pathIndex;
-        private int _k1;
+
+        private int _inputInteger;
         private char _istr;
+        private int _k1;
+        private int _ll;
+        private int _nextLine;
+        private int _o;
+        private int _pathIndex;
 
         public Game(IO io)
         {
@@ -161,7 +162,7 @@ namespace Wumpus
                         case 655:
                             _io.Prompt("TUNNELS LEAD TO ");
                             _io.Prompt(exits[_ll, 1].ToString());
-                                // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
+                            // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
                             _io.Prompt(" ");
                             _io.Prompt(exits[_ll, 2].ToString());
                             _io.Prompt(" ");
@@ -204,15 +205,12 @@ namespace Wumpus
                             _pathIndex = 1;
                             break; // 805 for k = 1 to j9
                         case 810:
-                            _k1 = 1;
-                            break; // 810 for k1 = 1 to 3
-                        case 815:
-                            if (exits[_ll, _k1] == _arrowFiringPath[_pathIndex]) _nextLine = 895;
-                            break; // 815 if s(l,k1) = p(k) then 895
-                        case 820:
-                            ++_k1;
-                            if (_k1 <= 3) _nextLine = 815;
-                            break; // 820 next k1
+
+
+                            if (CanArrowGoToNextRoom())
+                                _nextLine = 895;
+
+                            break;
                         case 830:
                             _ll = exits[_ll, Dice.RollD3()];
                             break; // 830 l = s(l,fnb(1))
@@ -263,7 +261,11 @@ namespace Wumpus
                             _gameOverStatus = 0;
                             break; // 980 f = 0
                         case 985:
-                            GetARoom();
+                            do
+                            {
+                                _io.Prompt("WHERE TO ");
+                                _ll = _io.readInt();
+                            } while ((_ll < 1) || (_ll > 20));
                             break;
                         case 1005:
                             _pathIndex = 1;
@@ -346,13 +348,12 @@ namespace Wumpus
             }
         }
 
-        private void GetARoom()
+        private bool CanArrowGoToNextRoom()
         {
-            do
-            {
-                _io.Prompt("WHERE TO ");
-                _ll = _io.readInt();
-            } while (((_ll < 1) || (_ll > 20)));
+            for (_k1 = 1; _k1 <= 3; _k1++)
+                if (exits[_ll, _k1] == _arrowFiringPath[_pathIndex])
+                    return true;
+            return false;
         }
 
         private void MoveWumpus()
