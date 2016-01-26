@@ -90,8 +90,6 @@ namespace Wumpus
                             break; // 270 on o goto 280,300
                         case 280:
                             ShootArrowAndMoveWumpus();
-                            break; // 280 gosub 715
-                        case 285:
                             if (_gameOverStatus == 0) _nextLine = 255;
                             else _nextLine = 310;
                             break; // 290 goto 310
@@ -122,10 +120,8 @@ namespace Wumpus
                             MoveWumpus();
                             returnFromGosub();
                             break; // 970 return
-                        case 980:
-                            _gameOverStatus = 0;
-                            break; // 980 f = 0
                         case 985:
+                            _gameOverStatus = 0;
                             do
                             {
                                 _io.Prompt("WHERE TO ");
@@ -158,32 +154,21 @@ namespace Wumpus
                             gosub(940, 1075);
                             break; // 1070 gosub 940
                         case 1075:
-                            if (_gameOverStatus == 0) _nextLine = 1090;
-                            break; // 1075 if f = 0 then 1090
-                        case 1080:
-                            returnFromGosub();
+                            if (_gameOverStatus != 0) returnFromGosub();
                             break; // 1080 return
                         case 1090:
-                            if (_ll == _boardPieces._pieces[3]) _nextLine = 1100;
-                            break; // 1090 if l = l(3) then 1100
-                        case 1095:
-                            if (_ll != _boardPieces._pieces[4]) _nextLine = 1120;
-                            break; // 1095 if l <> l(4) then 1120
-                        case 1100:
-                            _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
-                            _gameOverStatus = -1;
-                            returnFromGosub();
-                            break; // 1110 return
-                        case 1120:
-                            if (_ll == _boardPieces._pieces[5]) _nextLine = 1130;
-                            break; // 1120 if l = l(5) then 1130
-                        case 1125:
-                            if (_ll != _boardPieces._pieces[6]) _nextLine = 1145;
-                            break; // 1125 if l <> l(6) then 1145
-                        case 1130:
-                            _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
-                            _ll = Dice.RollD20();
-                            _nextLine = 1045;
+                            if (FellInPit())
+                            {
+                                _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
+                                _gameOverStatus = -1;
+                                returnFromGosub();
+                            }
+                            if (HitABat())
+                            {
+                                _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
+                                _ll = Dice.RollD20();
+                                _nextLine = 1045;
+                            }
                             break; // 1140 goto 1045
                         case 1145:
                             returnFromGosub();
@@ -197,6 +182,16 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private bool HitABat()
+        {
+            return _ll == _boardPieces._pieces[5] || _ll == _boardPieces._pieces[6];
+        }
+
+        private bool FellInPit()
+        {
+            return _ll == _boardPieces._pieces[3] || _ll == _boardPieces._pieces[4];
         }
 
         private void ShootArrowAndMoveWumpus()
