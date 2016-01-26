@@ -81,11 +81,7 @@ namespace Wumpus
                             break; 
                         case 255:
                             PrintRoomStatus();
-                            break; 
-                        case 265:
                             PromptShootOrMove();
-                            break; 
-                        case 270:
                             switch (ActionTaken)
                             {
                                 case 1:
@@ -101,9 +97,7 @@ namespace Wumpus
                             break; // 280 gosub 715
                         case 285:
                             if (_gameOverStatus == 0) _nextLine = 255;
-                            break; // 285 if f = 0 then 255
-                        case 290:
-                            _nextLine = 310;
+                            else _nextLine = 310;
                             break; // 290 goto 310
                         case 300:
                             gosub(975, 305);
