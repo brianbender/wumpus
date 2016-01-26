@@ -76,11 +76,7 @@ namespace Wumpus
                             break;
                         case 230:
                             _arrowsLeft = 5;
-                            break; // 230 a = 5
-                        case 235:
                             _ll = _boardPieces._pieces[1];
-                            break; // 235 l = l(1)
-                        case 245:
                             _io.WriteLine("HUNT THE WUMPUS");
                             break; // 245 print "HUNT THE WUMPUS"
                         case 255:
@@ -136,22 +132,14 @@ namespace Wumpus
                             for (var j = 2; j <= 6; ++j)
                                 if (neighboringRooms.Contains(_boardPieces._pieces[j]))
                                     PrintNearHazard(j);
-
-                            break; // 605 if s(l(1),k) <> l(j) then 640
-                        case 650:
                             _io.Prompt("YOUR ARE IN ROOM ");
                             _io.WriteLine(_boardPieces._pieces[1].ToString());
-                            break; // 650 print "YOU ARE IN ROOM ";l(1)
-                        case 655:
                             _io.Prompt("TUNNELS LEAD TO ");
                             _io.Prompt(exits[_ll, 1].ToString());
-                            // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
                             _io.Prompt(" ");
                             _io.Prompt(exits[_ll, 2].ToString());
                             _io.Prompt(" ");
                             _io.WriteLine(exits[_ll, 3].ToString());
-                            break;
-                        case 660:
                             _io.WriteLine("");
                             break; // 660 print
                         case 665:
