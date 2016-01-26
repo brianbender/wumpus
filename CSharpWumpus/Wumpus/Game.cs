@@ -28,7 +28,7 @@ namespace Wumpus
         private int _k1;
         private int _ll;
         private int _nextLine;
-        private int _o;
+        private int ActionTaken;
         private int _pathIndex;
 
         public Game(IO io)
@@ -57,7 +57,7 @@ namespace Wumpus
                 _arrowFiringPath = new int[6];
                 _arrowsLeft = 5;
                 _ll = _arrowsLeft;
-                _o = 1;
+                ActionTaken = 1;
                 _gameOverStatus = 0;
 
                 _pathIndex = 0;
@@ -86,7 +86,7 @@ namespace Wumpus
                             PromptShootOrMove();
                             break; 
                         case 270:
-                            switch (_o)
+                            switch (ActionTaken)
                             {
                                 case 1:
                                     _nextLine = 280;
@@ -199,14 +199,16 @@ namespace Wumpus
                             break;
                         case 1005:
                             _pathIndex = 1;
-                            break; // 1005 for k = 1 to 3
-                        case 1015:
-                            if (exits[_boardPieces._pieces[1], _pathIndex] == _ll) _nextLine = 1045;
+                            do
+                            {
+                                if (exits[_boardPieces._pieces[1], _pathIndex] == _ll)
+                                {
+                                    _nextLine = 1045;
+                                    break;
+                                }
+                                ++_pathIndex;
+                            } while (_pathIndex <= 3);
                             break; // 1015 if s(l(1),k) = l then 1045
-                        case 1020:
-                            ++_pathIndex;
-                            if (_pathIndex <= 3) _nextLine = 1010;
-                            break; // 1020 next k
                         case 1025:
                             if (_ll == _boardPieces._pieces[1]) _nextLine = 1045;
                             break; // 1025 if l = l(1) then 1045
@@ -286,12 +288,12 @@ namespace Wumpus
                 _istr = _io.ReadChar();
                 if (_istr == 'S' || _istr == 's')
                 {
-                    _o = 1;
+                    ActionTaken = 1;
                     break;
                 }
                 if (_istr == 'M' || _istr == 'm')
                 {
-                    _o = 2;
+                    ActionTaken = 2;
                     break;
                 }
             }
