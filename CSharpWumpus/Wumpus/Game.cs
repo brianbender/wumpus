@@ -85,10 +85,10 @@ namespace Wumpus
                             switch (ActionTaken)
                             {
                                 case 1:
-                                    _nextLine = 280;
+                                    _nextLine = 280; //shoot
                                     break;
                                 case 2:
-                                    _nextLine = 300;
+                                    _nextLine = 300; //move
                                     break;
                             }
                             break; // 270 on o goto 280,300
@@ -149,9 +149,7 @@ namespace Wumpus
                         case 845:
                             _io.WriteLine("MISSED");
                             _ll = _boardPieces._pieces[1];
-                            gosub(935, 865);
-                            break; // 860 gosub 935
-                        case 870:
+                            MoveWumpus();
                             _arrowsLeft = _arrowsLeft - 1;
                             if (_arrowsLeft > 0) returnFromGosub();
                             break; // 875 if a > 0 then 885
