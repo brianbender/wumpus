@@ -208,26 +208,18 @@ namespace Wumpus
                                 }
                                 ++_pathIndex;
                             } while (_pathIndex <= 3);
-                            break; // 1015 if s(l(1),k) = l then 1045
-                        case 1025:
                             if (_ll == _boardPieces._pieces[1]) _nextLine = 1045;
                             break; // 1025 if l = l(1) then 1045
                         case 1030:
                             _io.Prompt("NOT POSSIBLE - ");
-                            break; // 1030 print "NOT POSSIBLE -";
-                        case 1035:
                             _nextLine = 985;
                             break; // 1035 goto 985
                         case 1045:
                             _boardPieces._pieces[1] = _ll;
-                            break; // 1045 l(1) = l
-                        case 1055:
                             if (_ll != _boardPieces._pieces[2]) _nextLine = 1090;
                             break; // 1055 if l <> l(2) then 1090
                         case 1060:
                             _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
-                            break; // 1060 print "... OOPS! BUMPED A WUMPUS!"
-                        case 1070:
                             gosub(940, 1075);
                             break; // 1070 gosub 940
                         case 1075:
@@ -244,11 +236,7 @@ namespace Wumpus
                             break; // 1095 if l <> l(4) then 1120
                         case 1100:
                             _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
-                            break; // 1100 print "YYYYIIIIEEEE . . . FELL IN PIT"
-                        case 1105:
                             _gameOverStatus = -1;
-                            break; // 1105 f = -1
-                        case 1110:
                             returnFromGosub();
                             break; // 1110 return
                         case 1120:
@@ -259,11 +247,7 @@ namespace Wumpus
                             break; // 1125 if l <> l(6) then 1145
                         case 1130:
                             _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
-                            break; // 1130 print "ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!"
-                        case 1135:
                             _ll = Dice.RollD20();
-                            break; // 1135 l = fna(1)
-                        case 1140:
                             _nextLine = 1045;
                             break; // 1140 goto 1045
                         case 1145:
