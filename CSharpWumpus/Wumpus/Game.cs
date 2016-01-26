@@ -131,7 +131,7 @@ namespace Wumpus
                             _io.WriteLine("");
                             break; // 590 print
                         case 605:
-                            var neighboringRooms = getNeighboringRooms();
+                            var neighboringRooms = GetNeighboringRooms();
 
                             for (var j = 2; j <= 6; ++j)
                                 if (neighboringRooms.Contains(_boardPieces._pieces[j]))
@@ -188,17 +188,13 @@ namespace Wumpus
                             _pathIndex = 1;
                             break; // 805 for k = 1 to j9
                         case 810:
-
-
                             if (CanArrowGoToNextRoom())
                                 _nextLine = 895;
-
-                            break;
-                        case 830:
-                            _ll = exits[_ll, Dice.RollD3()];
-                            break; // 830 l = s(l,fnb(1))
-                        case 835:
-                            _nextLine = 900;
+                            else
+                            {
+                                _ll = exits[_ll, Dice.RollD3()];
+                                _nextLine = 900;
+                            }
                             break; // 835 goto 900
                         case 840:
                             ++_pathIndex;
@@ -390,7 +386,7 @@ namespace Wumpus
             } while (_inputInteger > 5 || _inputInteger < 1);
         }
 
-        private List<int> getNeighboringRooms()
+        private List<int> GetNeighboringRooms()
         {
             var neighboringRooms = new List<int>();
             for (var i = 1; i <= 3; i++)
