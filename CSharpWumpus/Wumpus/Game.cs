@@ -155,9 +155,7 @@ namespace Wumpus
                                 _gameOverStatus = 1;
                                 returnFromGosub();
                             }
-                            break;
-                        case 920:
-                            if (YouShotYourself())
+                            else if (YouShotYourself())
                             {
                                 _io.WriteLine("OUCH! ARROW GOT YOU!");
                                 _gameOverStatus = -1;
