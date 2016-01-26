@@ -77,30 +77,7 @@ namespace Wumpus
                             _io.WriteLine("HUNT THE WUMPUS");
                             break;
                         case 255:
-                            PrintRoomStatus();
-                            PromptShootOrMove();
-                            switch (_actionTaken)
-                            {
-                                case 1:
-                                    _nextLine = 280; //shoot
-                                    break;
-                                case 2:
-                                    _nextLine = 300; //move
-                                    break;
-                            }
-                            break; // 270 on o goto 280,300
-                        case 280:
-                            ShootArrowAndMoveWumpus();
-                            if (_gameOverStatus == 0) _nextLine = 255;
-                            else _nextLine = 310;
-                            break; // 290 goto 310
-                        case 300:
-                            Move();
-                            break; // 300 gosub 975
-                        case 305:
-                            if (_gameOverStatus == 0) _nextLine = 255;
-                            break; // 305 if f = 0 then 255
-                        case 310:
+                            RunGameUntilGameOver();
                             HandleGameOver();
                             _boardPieces.ResetToLastPieces();
                             break; // 350 next j
@@ -121,6 +98,24 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void RunGameUntilGameOver()
+        {
+            do
+            {
+                PrintRoomStatus();
+                PromptShootOrMove();
+                switch (_actionTaken)
+                {
+                    case 1:
+                        ShootArrowAndMoveWumpus();
+                        break;
+                    case 2:
+                        Move();
+                        break;
+                }
+            } while (_gameOverStatus == 0);
         }
 
         private void Move()
