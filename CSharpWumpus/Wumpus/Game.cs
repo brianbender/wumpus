@@ -131,17 +131,11 @@ namespace Wumpus
                             break; // 665 return
                         case 675:
                             _io.Prompt("SHOOT OR MOVE (S-M) ");
-                            break; // 675 print "SHOOT OR MOVE (S-M)";
-                        case 680:
                             _istr = _io.ReadChar();
-                            break; // 680 input i$
-                        case 685:
                             if (_istr != 'S' && _istr != 's') _nextLine = 700;
                             break; // 685 if (i$ <> "S") and (i$ <> "s") then 700
                         case 690:
                             _o = 1;
-                            break; // 690 o = 1
-                        case 695:
                             returnFromGosub();
                             break; // 695 return
                         case 700:
@@ -149,8 +143,6 @@ namespace Wumpus
                             break; // 700 if (i$ <> "M") and (i$ <> "m") then 675
                         case 705:
                             _o = 2;
-                            break; // 705 o = 2
-                        case 710:
                             returnFromGosub();
                             break; // 710 return
                         case 720:
