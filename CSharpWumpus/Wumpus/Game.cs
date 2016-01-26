@@ -125,8 +125,6 @@ namespace Wumpus
                             break; // 370 goto 230
                         case 590:
                             _io.WriteLine("");
-                            break; // 590 print
-                        case 605:
                             var neighboringRooms = GetNeighboringRooms();
 
                             for (var j = 2; j <= 6; ++j)
