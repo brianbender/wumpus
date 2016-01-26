@@ -115,8 +115,6 @@ namespace Wumpus
                             break; // 370 goto 230
                         case 590:
                             PrintRoomStatus();
-                            break; // 660 print
-                        case 665:
                             returnFromGosub();
                             break; // 665 return
                         case 940:
