@@ -147,14 +147,12 @@ namespace Wumpus
                             break; // 1035 goto 985
                         case 1045:
                             _boardPieces._pieces[1] = _ll;
-                            if (_ll != _boardPieces._pieces[2]) _nextLine = 1090;
-                            break; // 1055 if l <> l(2) then 1090
-                        case 1060:
-                            _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
-                            gosub(940, 1075);
-                            break; // 1070 gosub 940
-                        case 1075:
-                            if (_gameOverStatus != 0) returnFromGosub();
+                            if (_ll == _boardPieces._pieces[2])
+                            {
+                                _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
+                                MoveWumpus();
+                                if (_gameOverStatus != 0) returnFromGosub();
+                            }
                             break; // 1080 return
                         case 1090:
                             if (FellInPit())
