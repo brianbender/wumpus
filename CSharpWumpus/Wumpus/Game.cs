@@ -8,8 +8,6 @@ namespace Wumpus
         private readonly BoardPieces _boardPieces;
         private readonly IO _io;
 
-        private readonly Stack<int> _returnLine = new Stack<int>();
-
         private readonly int[,] exits =
         {
             {0, 0, 0, 0},
