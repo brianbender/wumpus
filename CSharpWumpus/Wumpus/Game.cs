@@ -8,6 +8,8 @@ namespace Wumpus
         private readonly BoardPieces _boardPieces;
         private readonly IO _io;
 
+        private readonly Stack<int> _returnLine = new Stack<int>();
+
         private readonly int[,] exits =
         {
             {0, 0, 0, 0},
@@ -17,7 +19,7 @@ namespace Wumpus
             {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
         };
 
-        private readonly Stack<int> _returnLine = new Stack<int>();
+        private int _actionTaken;
         private int[] _arrowFiringPath;
         private int _arrowsLeft;
         private int _currentLine;
@@ -27,7 +29,6 @@ namespace Wumpus
         private char _istr;
         private int _ll;
         private int _nextLine;
-        private int _actionTaken;
         private int _pathIndex;
 
         public Game(IO io)
@@ -42,7 +43,7 @@ namespace Wumpus
         public int EarlyExit { get; set; }
 
         public Dice Dice { get; set; }
-        
+
         public void Play()
         {
             try
@@ -74,7 +75,7 @@ namespace Wumpus
                             _arrowsLeft = 5;
                             _ll = _boardPieces._pieces[1];
                             _io.WriteLine("HUNT THE WUMPUS");
-                            break; 
+                            break;
                         case 255:
                             PrintRoomStatus();
                             PromptShootOrMove();
@@ -111,62 +112,38 @@ namespace Wumpus
                         case 370:
                             _nextLine = 230;
                             break; // 370 goto 230
-                        case 590:
-                            PrintRoomStatus();
-                            returnFromGosub();
-                            break; // 665 return
-                        case 940:
-                            // Wumpus movement
-                            MoveWumpus();
-                            returnFromGosub();
-                            break; // 970 return
                         case 985:
-                            _gameOverStatus = 0;
-                            do
-                            {
-                                _io.Prompt("WHERE TO ");
-                                _ll = _io.readInt();
-                            } while ((_ll < 1) || (_ll > 20));
-                            break;
-                        case 1005:
-                            _pathIndex = 1;
-                            do
-                            {
-                                if (exits[_boardPieces._pieces[1], _pathIndex] == _ll)
-                                {
-                                    _nextLine = 1045;
-                                    break;
-                                }
-                                ++_pathIndex;
-                            } while (_pathIndex <= 3);
-                            if (_ll == _boardPieces._pieces[1]) _nextLine = 1045;
-                            break; // 1025 if l = l(1) then 1045
-                        case 1030:
-                            _io.Prompt("NOT POSSIBLE - ");
-                            _nextLine = 985;
+                            DoMovement();
                             break; // 1035 goto 985
                         case 1045:
-                            _boardPieces._pieces[1] = _ll;
-                            if (_ll == _boardPieces._pieces[2])
+                            var done = false;
+                            do
                             {
-                                _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
-                                MoveWumpus();
-                                if (_gameOverStatus != 0) returnFromGosub();
-                            }
-                            break; // 1080 return
-                        case 1090:
-                            if (FellInPit())
-                            {
-                                _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
-                                _gameOverStatus = -1;
-                                returnFromGosub();
-                            }
-                            if (HitABat())
-                            {
-                                _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
-                                _ll = Dice.RollD20();
-                                _nextLine = 1045;
-                            }
+                                _boardPieces._pieces[1] = _ll;
+                                if (_ll == _boardPieces._pieces[2])
+                                {
+                                    _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
+                                    MoveWumpus();
+                                    if (_gameOverStatus != 0) returnFromGosub();
+                                    done = true;
+                                }
+                                else if (FellInPit())
+                                {
+                                    _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
+                                    _gameOverStatus = -1;
+                                    returnFromGosub();
+                                    done = true;
+                                }
+                                else if (HitABat())
+                                {
+                                    _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
+                                    _ll = Dice.RollD20();
+                                }
+                                else
+                                {
+                                    done = true;
+                                }
+                            } while (!done);
                             break; // 1140 goto 1045
                         case 1145:
                             returnFromGosub();
@@ -180,6 +157,42 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void DoMovement()
+        {
+            bool valid;
+            do
+            {
+                PromptMovement();
+                _pathIndex = 1;
+                valid = false;
+                do
+                {
+                    if (exits[_boardPieces._pieces[1], _pathIndex] == _ll ||
+                        _ll == _boardPieces._pieces[1])
+                    {
+                        valid = true;
+                    }
+                    ++_pathIndex;
+                } while (_pathIndex <= 3);
+
+                if (valid)
+                {
+                    break;
+                }
+                _io.Prompt("NOT POSSIBLE - ");
+            } while (!valid);
+        }
+
+        private void PromptMovement()
+        {
+            _gameOverStatus = 0;
+            do
+            {
+                _io.Prompt("WHERE TO ");
+                _ll = _io.readInt();
+            } while ((_ll < 1) || (_ll > 20));
         }
 
         private bool HitABat()
@@ -222,7 +235,6 @@ namespace Wumpus
             MoveWumpus();
             _arrowsLeft = _arrowsLeft - 1;
             if (_arrowsLeft <= 0) _gameOverStatus = -1;
-            return;
         }
 
         private bool YouShotYourself()
