@@ -17,7 +17,7 @@ namespace Wumpus
             {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
         };
 
-        private readonly Stack<int> ReturnLine = new Stack<int>();
+        private readonly Stack<int> _returnLine = new Stack<int>();
         private int[] _arrowFiringPath;
         private int _arrowsLeft;
         private int _currentLine;
@@ -27,7 +27,7 @@ namespace Wumpus
         private char _istr;
         private int _ll;
         private int _nextLine;
-        private int ActionTaken;
+        private int _actionTaken;
         private int _pathIndex;
 
         public Game(IO io)
@@ -42,9 +42,7 @@ namespace Wumpus
         public int EarlyExit { get; set; }
 
         public Dice Dice { get; set; }
-
-//TODO remove after refactoring so that this isn't needed by tests
-
+        
         public void Play()
         {
             try
@@ -56,7 +54,7 @@ namespace Wumpus
                 _arrowFiringPath = new int[6];
                 _arrowsLeft = 5;
                 _ll = _arrowsLeft;
-                ActionTaken = 1;
+                _actionTaken = 1;
                 _gameOverStatus = 0;
 
                 _pathIndex = 0;
@@ -80,7 +78,7 @@ namespace Wumpus
                         case 255:
                             PrintRoomStatus();
                             PromptShootOrMove();
-                            switch (ActionTaken)
+                            switch (_actionTaken)
                             {
                                 case 1:
                                     _nextLine = 280; //shoot
@@ -159,13 +157,14 @@ namespace Wumpus
                             }
                             break;
                         case 920:
-                            if (_ll != _boardPieces._pieces[1]) _nextLine = 840;
-                            else
+                            if (YouShotYourself())
                             {
                                 _io.WriteLine("OUCH! ARROW GOT YOU!");
                                 _gameOverStatus = -1;
                                 returnFromGosub();
                             }
+                            else
+                                _nextLine = 840;
                             break; // 930 goto 880
                         case 940:
                             // Wumpus movement
@@ -249,6 +248,11 @@ namespace Wumpus
             }
         }
 
+        private bool YouShotYourself()
+        {
+            return _ll == _boardPieces._pieces[1];
+        }
+
         private void PromptShootOrMove()
         {
             while (true)
@@ -257,12 +261,12 @@ namespace Wumpus
                 _istr = _io.ReadChar();
                 if (_istr == 'S' || _istr == 's')
                 {
-                    ActionTaken = 1;
+                    _actionTaken = 1;
                     break;
                 }
                 if (_istr == 'M' || _istr == 'm')
                 {
-                    ActionTaken = 2;
+                    _actionTaken = 2;
                     break;
                 }
             }
@@ -295,8 +299,8 @@ namespace Wumpus
 
         private bool CanArrowGoToNextRoom()
         {
-            for (var k1 = 1; k1 <= 3; k1++)
-                if (exits[_ll, k1] == _arrowFiringPath[_pathIndex])
+            for (var i = 1; i <= 3; i++)
+                if (exits[_ll, i] == _arrowFiringPath[_pathIndex])
                     return true;
             return false;
         }
@@ -406,15 +410,15 @@ namespace Wumpus
         private void gosub(int gosubLine, int lineToReturnTo)
         {
             _nextLine = gosubLine;
-            ReturnLine.Push(lineToReturnTo);
+            _returnLine.Push(lineToReturnTo);
         }
 
         private void returnFromGosub()
         {
-            if (ReturnLine.Count == 0)
+            if (_returnLine.Count == 0)
                 _nextLine = 1151;
             else
-                _nextLine = ReturnLine.Pop();
+                _nextLine = _returnLine.Pop();
         }
     }
 }
