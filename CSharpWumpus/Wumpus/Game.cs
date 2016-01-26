@@ -25,7 +25,6 @@ namespace Wumpus
 
         private int _inputInteger;
         private char _istr;
-        private int _k1;
         private int _ll;
         private int _nextLine;
         private int ActionTaken;
@@ -61,7 +60,6 @@ namespace Wumpus
                 _gameOverStatus = 0;
 
                 _pathIndex = 0;
-                _k1 = 0;
                 _inputInteger = 0;
                 while (_currentLine <= 1150 && EarlyExit != _currentLine)
                 {
@@ -134,13 +132,10 @@ namespace Wumpus
                             _pathIndex = 1;
                             break; // 805 for k = 1 to j9
                         case 810:
-                            if (CanArrowGoToNextRoom())
-                                _nextLine = 895;
-                            else
-                            {
+                            if (!CanArrowGoToNextRoom())
                                 _ll = exits[_ll, Dice.RollD3()];
-                                _nextLine = 900;
-                            }
+                            _nextLine = 880;
+
                             break; // 835 goto 900
                         case 840:
                             ++_pathIndex;
@@ -300,8 +295,8 @@ namespace Wumpus
 
         private bool CanArrowGoToNextRoom()
         {
-            for (_k1 = 1; _k1 <= 3; _k1++)
-                if (exits[_ll, _k1] == _arrowFiringPath[_pathIndex])
+            for (var k1 = 1; k1 <= 3; k1++)
+                if (exits[_ll, k1] == _arrowFiringPath[_pathIndex])
                     return true;
             return false;
         }
