@@ -95,7 +95,7 @@ namespace Wumpus
                             else _nextLine = 310;
                             break; // 290 goto 310
                         case 300:
-                            gosub(975, 305);
+                            Move();
                             break; // 300 gosub 975
                         case 305:
                             if (_gameOverStatus == 0) _nextLine = 255;
@@ -112,42 +112,6 @@ namespace Wumpus
                         case 370:
                             _nextLine = 230;
                             break; // 370 goto 230
-                        case 985:
-                            DoMovement();
-                            break; // 1035 goto 985
-                        case 1045:
-                            var done = false;
-                            do
-                            {
-                                _boardPieces._pieces[1] = _ll;
-                                if (_ll == _boardPieces._pieces[2])
-                                {
-                                    _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
-                                    MoveWumpus();
-                                    if (_gameOverStatus != 0) returnFromGosub();
-                                    done = true;
-                                }
-                                else if (FellInPit())
-                                {
-                                    _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
-                                    _gameOverStatus = -1;
-                                    returnFromGosub();
-                                    done = true;
-                                }
-                                else if (HitABat())
-                                {
-                                    _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
-                                    _ll = Dice.RollD20();
-                                }
-                                else
-                                {
-                                    done = true;
-                                }
-                            } while (!done);
-                            break; // 1140 goto 1045
-                        case 1145:
-                            returnFromGosub();
-                            break; // 1145 return
                     }
                     _currentLine = _nextLine;
                 }
@@ -157,6 +121,39 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void Move()
+        {
+            DoMovement();
+            var done = false;
+            do
+            {
+                _boardPieces._pieces[1] = _ll;
+                if (_ll == _boardPieces._pieces[2])
+                {
+                    _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
+                    MoveWumpus();
+                    if (_gameOverStatus != 0) return;
+                    done = true;
+                }
+                else if (FellInPit())
+                {
+                    _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
+                    _gameOverStatus = -1;
+                    return;
+                    done = true;
+                }
+                else if (HitABat())
+                {
+                    _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
+                    _ll = Dice.RollD20();
+                }
+                else
+                {
+                    done = true;
+                }
+            } while (!done);
         }
 
         private void DoMovement()
@@ -394,20 +391,6 @@ namespace Wumpus
             if (!(istr == 'N' || istr == 'n'))
                 _io.GiveInstructions();
             return istr;
-        }
-
-        private void gosub(int gosubLine, int lineToReturnTo)
-        {
-            _nextLine = gosubLine;
-            _returnLine.Push(lineToReturnTo);
-        }
-
-        private void returnFromGosub()
-        {
-            if (_returnLine.Count == 0)
-                _nextLine = 1151;
-            else
-                _nextLine = _returnLine.Pop();
         }
     }
 }
