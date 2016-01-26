@@ -89,7 +89,7 @@ namespace Wumpus
                             }
                             break; // 270 on o goto 280,300
                         case 280:
-                            gosub(715, 285);
+                            ShootArrowAndMoveWumpus();
                             break; // 280 gosub 715
                         case 285:
                             if (_gameOverStatus == 0) _nextLine = 255;
@@ -123,47 +123,6 @@ namespace Wumpus
                             PromptShootOrMove();
                             returnFromGosub();
                             break; // 710 return
-                        case 720:
-                            PromptForArrowDistance();
-                            PromptForArrowPath();
-                            _ll = _boardPieces._pieces[1];
-                            _pathIndex = 1;
-                            break; // 805 for k = 1 to j9
-                        case 810:
-                            if (!CanArrowGoToNextRoom())
-                                _ll = exits[_ll, Dice.RollD3()];
-                            _nextLine = 880;
-
-                            break; // 835 goto 900
-                        case 840:
-                            ++_pathIndex;
-                            if (_pathIndex <= _inputInteger) _nextLine = 810;
-                            break; // 840 next k
-                        case 845:
-                            _io.WriteLine("MISSED");
-                            _ll = _boardPieces._pieces[1];
-                            MoveWumpus();
-                            _arrowsLeft = _arrowsLeft - 1;
-                            if (_arrowsLeft <= 0) _gameOverStatus = -1;
-                            returnFromGosub();
-                            break; // 885 return
-                        case 895:
-                            _ll = _arrowFiringPath[_pathIndex];
-                            if (YouShotTheWumpusWithAnArrow(_boardPieces, _arrowFiringPath[_pathIndex]))
-                            {
-                                _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
-                                _gameOverStatus = 1;
-                                returnFromGosub();
-                            }
-                            else if (YouShotYourself())
-                            {
-                                _io.WriteLine("OUCH! ARROW GOT YOU!");
-                                _gameOverStatus = -1;
-                                returnFromGosub();
-                            }
-                            else
-                                _nextLine = 840;
-                            break; // 930 goto 880
                         case 940:
                             // Wumpus movement
                             MoveWumpus();
@@ -244,6 +203,39 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void ShootArrowAndMoveWumpus()
+        {
+            PromptForArrowDistance();
+            PromptForArrowPath();
+            _ll = _boardPieces._pieces[1];
+            _pathIndex = 1;
+            do
+            {
+                if (!CanArrowGoToNextRoom())
+                    _ll = exits[_ll, Dice.RollD3()];
+                _ll = _arrowFiringPath[_pathIndex];
+                if (YouShotTheWumpusWithAnArrow(_boardPieces, _arrowFiringPath[_pathIndex]))
+                {
+                    _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
+                    _gameOverStatus = 1;
+                    return;
+                }
+                if (YouShotYourself())
+                {
+                    _io.WriteLine("OUCH! ARROW GOT YOU!");
+                    _gameOverStatus = -1;
+                    return;
+                }
+                ++_pathIndex;
+            } while (_pathIndex <= _inputInteger);
+            _io.WriteLine("MISSED");
+            _ll = _boardPieces._pieces[1];
+            MoveWumpus();
+            _arrowsLeft = _arrowsLeft - 1;
+            if (_arrowsLeft <= 0) _gameOverStatus = -1;
+            return;
         }
 
         private bool YouShotYourself()
