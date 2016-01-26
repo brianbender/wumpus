@@ -78,13 +78,13 @@ namespace Wumpus
                             _arrowsLeft = 5;
                             _ll = _boardPieces._pieces[1];
                             _io.WriteLine("HUNT THE WUMPUS");
-                            break; // 245 print "HUNT THE WUMPUS"
+                            break; 
                         case 255:
                             PrintRoomStatus();
-                            break; // 255 gosub 585
+                            break; 
                         case 265:
-                            gosub(670, 270);
-                            break; // 265 gosub 670
+                            PromptShootOrMove();
+                            break; 
                         case 270:
                             switch (_o)
                             {
