@@ -80,7 +80,7 @@ namespace Wumpus
                             _io.WriteLine("HUNT THE WUMPUS");
                             break; // 245 print "HUNT THE WUMPUS"
                         case 255:
-                            gosub(585, 260);
+                            PrintRoomStatus();
                             break; // 255 gosub 585
                         case 265:
                             gosub(670, 270);
@@ -124,21 +124,7 @@ namespace Wumpus
                             _nextLine = 230;
                             break; // 370 goto 230
                         case 590:
-                            _io.WriteLine("");
-                            var neighboringRooms = GetNeighboringRooms();
-
-                            for (var j = 2; j <= 6; ++j)
-                                if (neighboringRooms.Contains(_boardPieces._pieces[j]))
-                                    PrintNearHazard(j);
-                            _io.Prompt("YOUR ARE IN ROOM ");
-                            _io.WriteLine(_boardPieces._pieces[1].ToString());
-                            _io.Prompt("TUNNELS LEAD TO ");
-                            _io.Prompt(exits[_ll, 1].ToString());
-                            _io.Prompt(" ");
-                            _io.Prompt(exits[_ll, 2].ToString());
-                            _io.Prompt(" ");
-                            _io.WriteLine(exits[_ll, 3].ToString());
-                            _io.WriteLine("");
+                            PrintRoomStatus();
                             break; // 660 print
                         case 665:
                             returnFromGosub();
@@ -310,6 +296,25 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void PrintRoomStatus()
+        {
+            _io.WriteLine("");
+            var neighboringRooms = GetNeighboringRooms();
+
+            for (var j = 2; j <= 6; ++j)
+                if (neighboringRooms.Contains(_boardPieces._pieces[j]))
+                    PrintNearHazard(j);
+            _io.Prompt("YOUR ARE IN ROOM ");
+            _io.WriteLine(_boardPieces._pieces[1].ToString());
+            _io.Prompt("TUNNELS LEAD TO ");
+            _io.Prompt(exits[_ll, 1].ToString());
+            _io.Prompt(" ");
+            _io.Prompt(exits[_ll, 2].ToString());
+            _io.Prompt(" ");
+            _io.WriteLine(exits[_ll, 3].ToString());
+            _io.WriteLine("");
         }
 
         private void HandleGameOver()
