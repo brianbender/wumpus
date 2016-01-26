@@ -130,19 +130,7 @@ namespace Wumpus
                             returnFromGosub();
                             break; // 665 return
                         case 675:
-                            _io.Prompt("SHOOT OR MOVE (S-M) ");
-                            _istr = _io.ReadChar();
-                            if (_istr != 'S' && _istr != 's') _nextLine = 700;
-                            break; // 685 if (i$ <> "S") and (i$ <> "s") then 700
-                        case 690:
-                            _o = 1;
-                            returnFromGosub();
-                            break; // 695 return
-                        case 700:
-                            if (_istr != 'M' && _istr != 'm') _nextLine = 675;
-                            break; // 700 if (i$ <> "M") and (i$ <> "m") then 675
-                        case 705:
-                            _o = 2;
+                            PromptShootOrMove();
                             returnFromGosub();
                             break; // 710 return
                         case 720:
@@ -287,6 +275,25 @@ namespace Wumpus
             {
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
+            }
+        }
+
+        private void PromptShootOrMove()
+        {
+            while (true)
+            {
+                _io.Prompt("SHOOT OR MOVE (S-M) ");
+                _istr = _io.ReadChar();
+                if (_istr == 'S' || _istr == 's')
+                {
+                    _o = 1;
+                    break;
+                }
+                if (_istr == 'M' || _istr == 'm')
+                {
+                    _o = 2;
+                    break;
+                }
             }
         }
 
