@@ -151,10 +151,7 @@ namespace Wumpus
                             _ll = _boardPieces._pieces[1];
                             MoveWumpus();
                             _arrowsLeft = _arrowsLeft - 1;
-                            if (_arrowsLeft > 0) returnFromGosub();
-                            break; // 875 if a > 0 then 885
-                        case 880:
-                            _gameOverStatus = -1;
+                            if (_arrowsLeft <= 0) _gameOverStatus = -1;
                             returnFromGosub();
                             break; // 885 return
                         case 895:
