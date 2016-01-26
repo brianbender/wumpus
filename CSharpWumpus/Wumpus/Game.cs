@@ -119,10 +119,6 @@ namespace Wumpus
                         case 665:
                             returnFromGosub();
                             break; // 665 return
-                        case 675:
-                            PromptShootOrMove();
-                            returnFromGosub();
-                            break; // 710 return
                         case 940:
                             // Wumpus movement
                             MoveWumpus();
