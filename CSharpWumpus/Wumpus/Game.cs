@@ -168,7 +168,8 @@ namespace Wumpus
                             else
                             {
                                 _io.WriteLine("OUCH! ARROW GOT YOU!");
-                                _nextLine = 880;
+                                _gameOverStatus = -1;
+                                returnFromGosub();
                             }
                             break; // 930 goto 880
                         case 940:
