@@ -60,14 +60,12 @@ namespace Wumpus
 
                 _pathIndex = 0;
                 _inputInteger = 0;
+                _istr = GiveIntroduction(_istr);
                 while (_currentLine <= 1150 && EarlyExit != _currentLine)
                 {
                     _nextLine = _currentLine + 1;
                     switch (_currentLine)
                     {
-                        case 15:
-                            _istr = GiveIntroduction(_istr);
-                            break; // 25 if (i$ = "N") or (i$ = "n") then 35
                         case 170:
                             _boardPieces.GenerateBoardPieces(Dice);
                             break;
@@ -137,7 +135,6 @@ namespace Wumpus
                     _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
                     _gameOverStatus = -1;
                     return;
-                    done = true;
                 }
                 else if (HitABat())
                 {
