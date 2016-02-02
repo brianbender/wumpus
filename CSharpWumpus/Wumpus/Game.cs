@@ -262,11 +262,11 @@ namespace Wumpus
             _io.Prompt("YOUR ARE IN ROOM ");
             _io.WriteLine(_boardPieces._pieces[1].ToString());
             _io.Prompt("TUNNELS LEAD TO ");
-            _io.Prompt(_map.exits[_ll, 1].ToString());
+            _io.Prompt(neighboringRooms[0].ToString());
             _io.Prompt(" ");
-            _io.Prompt(_map.exits[_ll, 2].ToString());
+            _io.Prompt(neighboringRooms[1].ToString());
             _io.Prompt(" ");
-            _io.WriteLine(_map.exits[_ll, 3].ToString());
+            _io.WriteLine(neighboringRooms[2].ToString());
             _io.WriteLine("");
         }
 
