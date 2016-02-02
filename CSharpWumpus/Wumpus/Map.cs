@@ -23,5 +23,10 @@ namespace Wumpus
             }
             return neighboringRooms;
         }
+
+        public int GetRandomNeighboringRoom(int location, Dice dice)
+        {
+            return exits[location, dice.RollD3()];
+        }
     }
 }

@@ -202,7 +202,9 @@ namespace Wumpus
             do
             {
                 if (!CanArrowGoToNextRoom())
-                    _ll = _map.exits[_ll, Dice.RollD3()];
+                {
+                    _ll = _map.GetRandomNeighboringRoom(_ll, Dice);
+                }
                 _ll = _arrowFiringPath[_pathIndex];
                 if (YouShotTheWumpusWithAnArrow(_boardPieces, _arrowFiringPath[_pathIndex]))
                 {
@@ -337,7 +339,6 @@ namespace Wumpus
         {
             switch (j - 1)
             {
-                // 610 on j-1 goto 615,625,625,635,635
                 case 1:
                     NearAWumpus();
                     break;
