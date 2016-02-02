@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Wumpus
 {
@@ -8,14 +7,8 @@ namespace Wumpus
         private readonly BoardPieces _boardPieces;
         private readonly IO _io;
 
-        private readonly int[,] exits =
-        {
-            {0, 0, 0, 0},
-            {0, 2, 5, 8}, {0, 1, 3, 10}, {0, 2, 4, 12}, {0, 3, 5, 14}, {0, 1, 4, 6},
-            {0, 5, 7, 15}, {0, 6, 8, 17}, {0, 1, 7, 9}, {0, 8, 10, 18}, {0, 2, 9, 11},
-            {0, 10, 12, 19}, {0, 3, 11, 13}, {0, 12, 14, 20}, {0, 4, 13, 15}, {0, 6, 14, 16},
-            {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
-        };
+        private readonly Map _map = new Map();
+        
 
         private int _actionTaken;
         private int[] _arrowFiringPath;
@@ -160,7 +153,7 @@ namespace Wumpus
                 valid = false;
                 do
                 {
-                    if (exits[_boardPieces._pieces[1], _pathIndex] == _ll ||
+                    if (_map.exits[_boardPieces._pieces[1], _pathIndex] == _ll ||
                         _ll == _boardPieces._pieces[1])
                     {
                         valid = true;
@@ -205,7 +198,7 @@ namespace Wumpus
             do
             {
                 if (!CanArrowGoToNextRoom())
-                    _ll = exits[_ll, Dice.RollD3()];
+                    _ll = _map.exits[_ll, Dice.RollD3()];
                 _ll = _arrowFiringPath[_pathIndex];
                 if (YouShotTheWumpusWithAnArrow(_boardPieces, _arrowFiringPath[_pathIndex]))
                 {
@@ -255,7 +248,7 @@ namespace Wumpus
         private void PrintRoomStatus()
         {
             _io.WriteLine("");
-            var neighboringRooms = GetNeighboringRooms();
+            var neighboringRooms = _map.GetNeighboringRooms(GetPlayerLocation());
 
             for (var j = 2; j <= 6; ++j)
                 if (neighboringRooms.Contains(_boardPieces._pieces[j]))
@@ -263,11 +256,11 @@ namespace Wumpus
             _io.Prompt("YOUR ARE IN ROOM ");
             _io.WriteLine(_boardPieces._pieces[1].ToString());
             _io.Prompt("TUNNELS LEAD TO ");
-            _io.Prompt(exits[_ll, 1].ToString());
+            _io.Prompt(_map.exits[_ll, 1].ToString());
             _io.Prompt(" ");
-            _io.Prompt(exits[_ll, 2].ToString());
+            _io.Prompt(_map.exits[_ll, 2].ToString());
             _io.Prompt(" ");
-            _io.WriteLine(exits[_ll, 3].ToString());
+            _io.WriteLine(_map.exits[_ll, 3].ToString());
             _io.WriteLine("");
         }
 
@@ -280,7 +273,7 @@ namespace Wumpus
         private bool CanArrowGoToNextRoom()
         {
             for (var i = 1; i <= 3; i++)
-                if (exits[_ll, i] == _arrowFiringPath[_pathIndex])
+                if (_map.exits[_ll, i] == _arrowFiringPath[_pathIndex])
                     return true;
             return false;
         }
@@ -289,7 +282,7 @@ namespace Wumpus
         {
             _pathIndex = Dice.RollD4();
             if (_pathIndex != 4)
-                _boardPieces._pieces[2] = exits[_boardPieces._pieces[2], _pathIndex];
+                _boardPieces._pieces[2] = _map.exits[_boardPieces._pieces[2], _pathIndex];
             if (_boardPieces._pieces[2] == _ll)
             {
                 _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
@@ -329,14 +322,6 @@ namespace Wumpus
                 _io.Prompt("NO. OF ROOMS (1-5) ");
                 _inputInteger = _io.readInt();
             } while (_inputInteger > 5 || _inputInteger < 1);
-        }
-
-        private List<int> GetNeighboringRooms()
-        {
-            var neighboringRooms = new List<int>();
-            for (var i = 1; i <= 3; i++)
-                neighboringRooms.Add(exits[GetPlayerLocation(), i]);
-            return neighboringRooms;
         }
 
         private int GetPlayerLocation()
