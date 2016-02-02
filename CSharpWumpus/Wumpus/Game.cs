@@ -59,20 +59,14 @@ namespace Wumpus
                 _pathIndex = 0;
                 _inputInteger = 0;
                 _istr = GiveIntroduction(_istr);
+                _boardPieces.GenerateBoardPieces(Dice);
                 while (_currentLine <= 1150 && EarlyExit != _currentLine)
                 {
                     _nextLine = _currentLine + 1;
                     switch (_currentLine)
                     {
-                        case 170:
-                            _boardPieces.GenerateBoardPieces(Dice);
-                            break;
                         case 230:
-                            _arrowsLeft = 5;
-                            _ll = _boardPieces._pieces[1];
-                            _io.WriteLine("HUNT THE WUMPUS");
-                            break;
-                        case 255:
+                            StartGame();
                             RunGameUntilGameOver();
                             HandleGameOver();
                             _boardPieces.ResetToLastPieces();
@@ -80,7 +74,10 @@ namespace Wumpus
                         case 355:
                             _io.Prompt("SAME SETUP (Y-N)");
                             _istr = _io.ReadChar();
-                            if (_istr != 'Y' && _istr != 'y') _nextLine = 170;
+                            if (_istr != 'Y' && _istr != 'y') { 
+                                _boardPieces.GenerateBoardPieces(Dice);
+                                _nextLine = 230;
+                            }
                             break; // 365 if (i$ <> "Y") and (i$ <> "y") then 170
                         case 370:
                             _nextLine = 230;
@@ -94,6 +91,13 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void StartGame()
+        {
+            _arrowsLeft = 5;
+            _ll = _boardPieces._pieces[1];
+            _io.WriteLine("HUNT THE WUMPUS");
         }
 
         private void RunGameUntilGameOver()
