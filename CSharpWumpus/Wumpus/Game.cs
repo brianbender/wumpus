@@ -198,10 +198,9 @@ namespace Wumpus
             do
             {
                 if (!CanArrowGoToNextRoom())
-                {
                     _ll = _map.GetRandomNeighboringRoom(_ll, Dice);
-                }
-                _ll = _arrowFiringPath[_pathIndex];
+                else
+                    _ll = _arrowFiringPath[_pathIndex];
                 if (YouShotTheWumpusWithAnArrow(_boardPieces, _arrowFiringPath[_pathIndex]))
                 {
                     _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
@@ -274,9 +273,13 @@ namespace Wumpus
 
         private bool CanArrowGoToNextRoom()
         {
+            var curRoom = _ll;
+            var roomToFireTo = _arrowFiringPath[_pathIndex]; 
             for (var i = 1; i <= 3; i++)
-                if (_map.exits[_ll, i] == _arrowFiringPath[_pathIndex])
+            {
+                if (_map.exits[curRoom, i] == roomToFireTo)
                     return true;
+            }
             return false;
         }
 
