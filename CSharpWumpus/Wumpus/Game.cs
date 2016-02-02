@@ -113,7 +113,7 @@ namespace Wumpus
 
         private void Move()
         {
-            DoMovement();
+            _ll = GetValidRoom();
             var done = false;
             do
             {
@@ -143,18 +143,19 @@ namespace Wumpus
             } while (!done);
         }
 
-        private void DoMovement()
+        private int GetValidRoom()
         {
+            int moveTo = 0;
             bool valid;
             do
             {
-                PromptMovement();
+                moveTo = PromptMovement();
                 _pathIndex = 1;
                 valid = false;
                 do
                 {
-                    if (_map.exits[_boardPieces._pieces[1], _pathIndex] == _ll ||
-                        _ll == _boardPieces._pieces[1])
+                    if (_map.exits[_boardPieces._pieces[1], _pathIndex] == moveTo ||
+                        moveTo == _boardPieces._pieces[1])
                     {
                         valid = true;
                     }
@@ -167,16 +168,19 @@ namespace Wumpus
                 }
                 _io.Prompt("NOT POSSIBLE - ");
             } while (!valid);
+            return moveTo;
         }
 
-        private void PromptMovement()
+        private int PromptMovement()
         {
+            int ll;
             _gameOverStatus = 0;
             do
             {
                 _io.Prompt("WHERE TO ");
-                _ll = _io.readInt();
-            } while ((_ll < 1) || (_ll > 20));
+                ll = _io.readInt();
+            } while ((ll < 1) || (ll > 20));
+            return ll;
         }
 
         private bool HitABat()
