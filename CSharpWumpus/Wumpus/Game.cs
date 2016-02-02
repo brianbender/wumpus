@@ -35,6 +35,12 @@ namespace Wumpus
 
         public Dice Dice { get; set; }
 
+        public int PathIndex
+        {
+            set { _pathIndex = value; }
+            get { return _pathIndex; }
+        }
+
         public void Play()
         {
             try
@@ -145,28 +151,18 @@ namespace Wumpus
 
         private int GetValidRoom()
         {
-            int moveTo = 0;
+            int moveTo;
             bool valid;
             do
             {
                 moveTo = PromptMovement();
-                _pathIndex = 1;
-                valid = false;
-                do
-                {
-                    if (_map.exits[_boardPieces._pieces[1], _pathIndex] == moveTo ||
-                        moveTo == _boardPieces._pieces[1])
-                    {
-                        valid = true;
-                    }
-                    ++_pathIndex;
-                } while (_pathIndex <= 3);
+                var roomPlayerIsIn = _boardPieces._pieces[1];
 
-                if (valid)
-                {
-                    break;
-                }
-                _io.Prompt("NOT POSSIBLE - ");
+                valid = _map.IsValidRoomToMoveTo(roomPlayerIsIn, moveTo);
+
+                if (!valid)
+                    _io.Prompt("NOT POSSIBLE - ");
+                
             } while (!valid);
             return moveTo;
         }

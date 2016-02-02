@@ -28,5 +28,21 @@ namespace Wumpus
         {
             return exits[location, dice.RollD3()];
         }
+
+        public bool IsValidRoomToMoveTo(int roomPlayerIsIn, int moveTo)
+        {
+            int pathIndex = 1;
+            var valid = false;
+            do
+            {
+                if (exits[roomPlayerIsIn, pathIndex] == moveTo ||
+                    moveTo == roomPlayerIsIn)
+                {
+                    valid = true;
+                }
+                ++pathIndex;
+            } while (pathIndex <= 3);
+            return valid;
+        }
     }
 }
