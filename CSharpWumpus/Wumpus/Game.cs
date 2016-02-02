@@ -95,7 +95,7 @@ namespace Wumpus
         private void StartGame()
         {
             _arrowsLeft = 5;
-            _ll = _boardPieces._pieces[1];
+            _ll = _boardPieces.GetPlayerLocation();
             _io.WriteLine("HUNT THE WUMPUS");
         }
 
@@ -123,7 +123,7 @@ namespace Wumpus
             var done = false;
             do
             {
-                _boardPieces._pieces[1] = _ll;
+                _boardPieces.SetPlayerLocation(_ll);
                 if (_ll == _boardPieces._pieces[2])
                 {
                     _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
@@ -156,7 +156,7 @@ namespace Wumpus
             do
             {
                 moveTo = PromptMovement();
-                var roomPlayerIsIn = _boardPieces._pieces[1];
+                var roomPlayerIsIn = _boardPieces.GetPlayerLocation();
 
                 valid = _map.IsValidRoomToMoveTo(roomPlayerIsIn, moveTo);
 
@@ -193,7 +193,7 @@ namespace Wumpus
         {
             PromptForArrowDistance();
             PromptForArrowPath();
-            _ll = _boardPieces._pieces[1];
+            _ll = _boardPieces.GetPlayerLocation();
             _pathIndex = 1;
             do
             {
@@ -216,7 +216,7 @@ namespace Wumpus
                 ++_pathIndex;
             } while (_pathIndex <= _inputInteger);
             _io.WriteLine("MISSED");
-            _ll = _boardPieces._pieces[1];
+            _ll = _boardPieces.GetPlayerLocation();
             MoveWumpus();
             _arrowsLeft = _arrowsLeft - 1;
             if (_arrowsLeft <= 0) _gameOverStatus = -1;
@@ -224,7 +224,7 @@ namespace Wumpus
 
         private bool YouShotYourself()
         {
-            return _ll == _boardPieces._pieces[1];
+            return _ll == _boardPieces.GetPlayerLocation();
         }
 
         private void PromptShootOrMove()
@@ -249,13 +249,13 @@ namespace Wumpus
         private void PrintRoomStatus()
         {
             _io.WriteLine("");
-            var neighboringRooms = _map.GetNeighboringRooms(GetPlayerLocation());
+            var neighboringRooms = _map.GetNeighboringRooms(_boardPieces.GetPlayerLocation());
 
             for (var j = 2; j <= 6; ++j)
                 if (neighboringRooms.Contains(_boardPieces._pieces[j]))
                     PrintNearHazard(j);
             _io.Prompt("YOUR ARE IN ROOM ");
-            _io.WriteLine(_boardPieces._pieces[1].ToString());
+            _io.WriteLine(_boardPieces.GetPlayerLocation().ToString());
             _io.Prompt("TUNNELS LEAD TO ");
             _io.Prompt(neighboringRooms[0].ToString());
             _io.Prompt(" ");
@@ -315,11 +315,6 @@ namespace Wumpus
                 _io.Prompt("NO. OF ROOMS (1-5) ");
                 _inputInteger = _io.readInt();
             } while (_inputInteger > 5 || _inputInteger < 1);
-        }
-
-        private int GetPlayerLocation()
-        {
-            return _boardPieces._pieces[1];
         }
 
         private void PrintNearHazard(int j)

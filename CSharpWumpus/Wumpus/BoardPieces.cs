@@ -39,5 +39,15 @@ namespace Wumpus
                 ++j;
             } while (j <= 6);
         }
+
+        public int GetPlayerLocation()
+        {
+            return _pieces[1];
+        }
+
+        public void SetPlayerLocation(int ll)
+        {
+            _pieces[1] = ll;
+        }
     }
 }
