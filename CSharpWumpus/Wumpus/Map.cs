@@ -4,7 +4,7 @@ namespace Wumpus
 {
     public class Map
     {
-        public readonly int[,] exits =
+        private readonly int[,] _exits =
         {
             {0, 0, 0, 0},
             {0, 2, 5, 8}, {0, 1, 3, 10}, {0, 2, 4, 12}, {0, 3, 5, 14}, {0, 1, 4, 6},
@@ -19,14 +19,19 @@ namespace Wumpus
 
             for (var i = 1; i <= 3; i++)
             {
-                neighboringRooms.Add(exits[location, i]);
+                neighboringRooms.Add(_exits[location, i]);
             }
             return neighboringRooms;
         }
 
+        public int GetNeighboringRoom(int location, int direction)
+        {
+            return GetNeighboringRooms(location)[direction-1];
+        }
+
         public int GetRandomNeighboringRoom(int location, Dice dice)
         {
-            return exits[location, dice.RollD3()];
+            return _exits[location, dice.RollD3()];
         }
 
         public bool IsValidRoomToMoveTo(int roomPlayerIsIn, int moveTo)
@@ -35,7 +40,7 @@ namespace Wumpus
             var valid = false;
             do
             {
-                if (exits[roomPlayerIsIn, pathIndex] == moveTo ||
+                if (_exits[roomPlayerIsIn, pathIndex] == moveTo ||
                     moveTo == roomPlayerIsIn)
                 {
                     valid = true;
@@ -43,6 +48,16 @@ namespace Wumpus
                 ++pathIndex;
             } while (pathIndex <= 3);
             return valid;
+        }
+
+        public bool IsNeighboringRoom(int curRoom, int roomToFireTo)
+        {
+            for (var i = 1; i <= 3; i++)
+            {
+                if (_exits[curRoom, i] == roomToFireTo)
+                    return true;
+            }
+            return false;
         }
     }
 }
